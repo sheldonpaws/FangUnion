@@ -1,0 +1,270 @@
+/* ===== FangUnion — Ретро-коммунистический стиль ===== */
+
+:root {
+    --red: #c41e3a;
+    --red-dark: #8b0000;
+    --red-light: #e84545;
+    --gold: #ffd700;
+    --gold-dark: #daa520;
+    --cream: #f5f0e1;
+    --cream-dark: #e8e0c8;
+    --brown: #3e2723;
+    --brown-light: #5d4037;
+    --text: #2c1810;
+    --text-light: #6d4c41;
+    --border: #8d6e63;
+    --bg: #f5f0e1;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background-color: var(--bg);
+    color: var(--text);
+    background-image:
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 40px,
+            rgba(196, 30, 58, 0.03) 40px,
+            rgba(196, 30, 58, 0.03) 41px
+        );
+    min-height: 100vh;
+}
+
+/* ===== Header ===== */
+
+.header {
+    background: linear-gradient(135deg, var(--red) 0%, var(--red-dark) 100%);
+    border-bottom: 4px solid var(--gold);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo-icon {
+    font-size: 28px;
+    color: var(--gold);
+}
+
+.logo-text {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--gold);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    letter-spacing: 2px;
+}
+
+.nav {
+    display: flex;
+    gap: 4px;
+}
+
+.nav-link {
+    color: var(--cream);
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background: rgba(255, 215, 0, 0.2);
+    color: var(--gold);
+}
+
+/* ===== Main Layout ===== */
+
+.main {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 250px 1fr 250px;
+    gap: 20px;
+}
+
+/* ===== Cards ===== */
+
+.card {
+    background: var(--cream);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--red), var(--gold), var(--red));
+    border-radius: 6px 6px 0 0;
+}
+
+.card-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--red-dark);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed var(--border);
+}
+
+/* ===== Feed ===== */
+
+.new-post textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 10px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 14px;
+    resize: vertical;
+    background: #fff;
+}
+
+.new-post textarea:focus {
+    outline: none;
+    border-color: var(--red);
+}
+
+.post {
+    padding: 16px;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.post-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--red), var(--gold));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.post-author {
+    font-weight: bold;
+    color: var(--red-dark);
+}
+
+.post-date {
+    font-size: 12px;
+    color: var(--text-light);
+}
+
+.post-content {
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.post-image {
+    max-width: 100%;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+}
+
+/* ===== Buttons ===== */
+
+.btn {
+    padding: 8px 20px;
+    border: 2px solid;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background: var(--red);
+    color: var(--cream);
+    border-color: var(--red-dark);
+}
+
+.btn-primary:hover {
+    background: var(--red-dark);
+}
+
+.btn-gold {
+    background: var(--gold);
+    color: var(--brown);
+    border-color: var(--gold-dark);
+}
+
+.btn-gold:hover {
+    background: var(--gold-dark);
+}
+
+/* ===== Sidebar ===== */
+
+.statute {
+    padding-left: 20px;
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--text-light);
+}
+
+/* ===== Footer ===== */
+
+.footer {
+    background: var(--brown);
+    color: var(--cream);
+    text-align: center;
+    padding: 16px;
+    margin-top: 40px;
+    border-top: 4px solid var(--gold);
+    font-size: 14px;
+}
+
+/* ===== Responsive ===== */
+
+@media (max-width: 900px) {
+    .main {
+        grid-template-columns: 1fr;
+    }
+    .sidebar-left,
+    .sidebar-right {
+        display: none;
+    }
+}

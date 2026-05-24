@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вступить в Союз — FangUnion</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <div class="logo">
+                <span class="logo-icon">☭</span>
+                <span class="logo-text">FangUnion</span>
+            </div>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">Лента</a>
+                <a href="login.html" class="nav-link active">Вступить</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main" style="max-width: 500px; grid-template-columns: 1fr;">
+        <div class="card" style="max-width: 400px; margin: 40px auto;">
+            <h2 class="card-title" style="text-align:center;">⚒️ Вступить в Союз Клыков</h2>
+
+            <div id="register-form">
+                <div class="form-group">
+                    <label>Позывной (логин)</label>
+                    <input type="text" id="reg-username" placeholder="Волкодав">
+                </div>
+                <div class="form-group">
+                    <label>Пароль</label>
+                    <input type="password" id="reg-password" placeholder="Секретное слово">
+                </div>
+                <div class="form-group">
+                    <label>Имя для отображения</label>
+                    <input type="text" id="reg-display" placeholder="Серый Волк">
+                </div>
+                <div class="form-group">
+                    <label>Вид (species)</label>
+                    <input type="text" id="reg-species" placeholder="Волк, лиса, дракон...">
+                </div>
+                <button class="btn btn-primary" style="width:100%" onclick="register()">Вступить в ряды!</button>
+                <p style="text-align:center; margin-top:12px; font-size:13px;">
+                    Уже в Союзе? <a href="#" onclick="showLogin()" style="color:var(--red);">Войти</a>
+                </p>
+            </div>
+
+            <div id="login-form" style="display:none;">
+                <div class="form-group">
+                    <label>Позывной</label>
+                    <input type="text" id="login-username">
+                </div>
+                <div class="form-group">
+                    <label>Пароль</label>
+                    <input type="password" id="login-password">
+                </div>
+                <button class="btn btn-gold" style="width:100%" onclick="login()">Войти</button>
+                <p style="text-align:center; margin-top:12px; font-size:13px;">
+                    Ещё не в Союзе? <a href="#" onclick="showRegister()" style="color:var(--red);">Вступить</a>
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>☭ FangUnion — Союз Клыков © 2026 | Все хвосты защищены ☭</p>
+    </footer>
+
+    <script>
+        const API = "http://localhost:8000/api";
+
+        function showLogin() {
+            document.getElementById("register-form").style.display = "none";
+            document.getElementById("login-form").style.display = "block";
+        }
+        function showRegister() {
+            document.getElementById("login-form").style.display = "none";
+            document.getElementById("register-form").style.display = "block";
+        }
+
+        async function register() {
+            const data = {
+                username: document.getElementById("reg-username").value.trim(),
+                password: document.getElementById("reg-password").value,
+                display_name: document.getElementById("reg-display").value.trim() || null,
+                species: document.getElementById("reg-species").value.trim() || null,
+            };
+            if (!data.username || !data.password) {
+                alert("Заполни позывной и пароль, товарищ!");
+                return;
+            }
+            try {
+                const res = await fetch(`${API}/users/register`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data),
+                });
+                if (res.ok) {
+                    alert("Добро пожаловать в Союз Клыков! ☭");
+                    window.location.href = "index.html";
+                } else {
+                    const err = await res.json();
+                    alert(err.detail || "Ошибка регистрации");
+                }
+            } catch (e) {
+                alert("Ошибка связи с сервером");
+            }
+        }
+
+        async function login() {
+            const data = {
+                username: document.getElementById("login-username").value.trim(),
+                password: document.getElementById("login-password").value,
+            };
+            try {
+                const res = await fetch(`${API}/users/login`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data),
+                });
+                if (res.ok) {
+                    const result = await res.json();
+                    localStorage.setItem("user_id", result.user_id);
+                    window.location.href = "profile.html";
+                } else {
+                    alert("Неверные данные, товарищ!");
+                }
+            } catch (e) {
+                alert("Ошибка связи с сервером");
+            }
+        }
+    </script>
+
+    <style>
+        .form-group {
+            margin-bottom: 12px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 4px;
+            color: var(--brown);
+            font-size: 14px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px 10px;
+            border: 2px solid var(--border);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--red);
+        }
+    </style>
+</body>
+</html>

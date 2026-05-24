@@ -1,0 +1,43 @@
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+from werkzeug.security import generate_password_hash, check_password_hash
+from database import get_db
+from models import User
+from schemas import UserCreate, UserResponse, UserLogin
+
+router = APIRouter(prefix="/users", tags=["users"])
+
+
+@router.post("/register", response_model=UserResponse)
+def register(user_data: UserCreate, db: Session = Depends(get_db)):
+    existing = db.query(User).filter(User.username == user_data.username).first()
+    if existing:
+        raise HTTPException(status_code=400, detail="Имя занято, товарищ!")
+
+    user = User(
+        username=user_data.username,
+        password_hash=generate_password_hash(user_data.password),
+        display_name=user_data.display_name,
+        species=user_data.species,
+        bio=user_data.bio,
+    )
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return user
+
+
+@router.post("/login")
+def login(credentials: UserLogin, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.username == credentials.username).first()
+    if not user or not check_password_hash(user.password_hash, credentials.password):
+        raise HTTPException(status_code=401, detail="Неверные данные, товарищ!")
+    return {"message": "Добро пожаловать в Союз Клыков!", "user_id": user.id}
+
+
+@router.get("/{user_id}", response_model=UserResponse)
+def get_user(user_id: int, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Товарищ не найден")
+    return user

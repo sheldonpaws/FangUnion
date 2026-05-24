@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FangUnion — Союз Клыков</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <div class="logo">
+                <span class="logo-icon">☭</span>
+                <span class="logo-text">FangUnion</span>
+            </div>
+            <nav class="nav">
+                <a href="index.html" class="nav-link active">Лента</a>
+                <a href="assets.html" class="nav-link">Асеты</a>
+                <a href="profile.html" class="nav-link">Профиль</a>
+                <a href="login.html" class="nav-link">Вступить</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="sidebar-left">
+            <div class="card">
+                <h3 class="card-title">🏛️ О Союзе</h3>
+                <p>Товарищи фурри! Добро пожаловать в Союз Клыков — социальную сеть для всех, кто верит в дружбу, арт и хвосты!</p>
+            </div>
+            <div class="card">
+                <h3 class="card-title">📜 Устав Союза</h3>
+                <ol class="statute">
+                    <li>Все клыки равны</li>
+                    <li>Арт — достояние народа</li>
+                    <li>Хвосты не враги</li>
+                    <li>Верность стае превыше всего</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="feed">
+            <div class="card new-post">
+                <h3 class="card-title">✏️ Новое объявление</h3>
+                <textarea id="post-content" placeholder="Что нового, товарищ?"></textarea>
+                <button class="btn btn-primary" onclick="createPost()">Опубликовать</button>
+            </div>
+
+            <div id="posts-container">
+                <!-- Посты загружаются сюда -->
+            </div>
+        </div>
+
+        <div class="sidebar-right">
+            <div class="card">
+                <h3 class="card-title">🏅 Активные товарищи</h3>
+                <div id="active-users">
+                    <!-- Пользователи -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>☭ FangUnion — Союз Клыков © 2026 | Все хвосты защищены ☭</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
