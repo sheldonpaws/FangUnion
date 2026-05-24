@@ -3,26 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вступить в Союз — FangUnion</title>
+    <title>Войти — FangUnion</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header class="header">
         <div class="header-inner">
-            <div class="logo">
-                <span class="logo-icon">☭</span>
+            <div class="logo" onclick="location.href='index.html'">
+                <span class="logo-icon">🐾</span>
                 <span class="logo-text">FangUnion</span>
             </div>
             <nav class="nav">
                 <a href="index.html" class="nav-link">Лента</a>
-                <a href="login.html" class="nav-link active">Вступить</a>
+                <a href="login.html" class="nav-link active">Войти</a>
             </nav>
         </div>
     </header>
 
-    <main class="main" style="max-width: 500px; grid-template-columns: 1fr;">
-        <div class="card" style="max-width: 400px; margin: 40px auto;">
-            <h2 class="card-title" style="text-align:center;">⚒️ Вступить в Союз Клыков</h2>
+    <main class="main" style="max-width: 480px; grid-template-columns: 1fr; display:flex; justify-content:center;">
+        <div class="card" style="width: 400px; margin-top: 40px;">
+            <h2 class="card-title" style="text-align:center;">🐾 Войти в стаю</h2>
 
             <div id="register-form">
                 <div class="form-group">
@@ -34,16 +34,31 @@
                     <input type="password" id="reg-password" placeholder="Секретное слово">
                 </div>
                 <div class="form-group">
-                    <label>Имя для отображения</label>
+                    <label>Имя</label>
                     <input type="text" id="reg-display" placeholder="Серый Волк">
                 </div>
                 <div class="form-group">
-                    <label>Вид (species)</label>
-                    <input type="text" id="reg-species" placeholder="Волк, лиса, дракон...">
+                    <label>Вид</label>
+                    <select id="reg-species">
+                        <option value="">— выбери вид —</option>
+                        <option value="Волк">Волк</option>
+                        <option value="Лиса">Лиса</option>
+                        <option value="Дракон">Дракон</option>
+                        <option value="Собака">Собака</option>
+                        <option value="Кошка">Кошка</option>
+                        <option value="Олень">Олень</option>
+                        <option value="Медведь">Медведь</option>
+                        <option value="Кролик">Кролик</option>
+                        <option value="Другое">Другое</option>
+                    </select>
                 </div>
-                <button class="btn btn-primary" style="width:100%" onclick="register()">Вступить в ряды!</button>
-                <p style="text-align:center; margin-top:12px; font-size:13px;">
-                    Уже в Союзе? <a href="#" onclick="showLogin()" style="color:var(--red);">Войти</a>
+                <div class="form-group">
+                    <label>О себе</label>
+                    <textarea id="reg-bio" placeholder="Расскажи немного о себе..." style="min-height:60px;"></textarea>
+                </div>
+                <button class="btn btn-primary" style="width:100%" onclick="register()">Вступить в стаю</button>
+                <p style="text-align:center; margin-top:14px; font-size:13px; color:var(--text-muted);">
+                    Уже в стае? <a href="#" onclick="showLogin()">Войти</a>
                 </p>
             </div>
 
@@ -57,19 +72,19 @@
                     <input type="password" id="login-password">
                 </div>
                 <button class="btn btn-gold" style="width:100%" onclick="login()">Войти</button>
-                <p style="text-align:center; margin-top:12px; font-size:13px;">
-                    Ещё не в Союзе? <a href="#" onclick="showRegister()" style="color:var(--red);">Вступить</a>
+                <p style="text-align:center; margin-top:14px; font-size:13px; color:var(--text-muted);">
+                    Ещё не в стае? <a href="#" onclick="showRegister()">Вступить</a>
                 </p>
             </div>
         </div>
     </main>
 
     <footer class="footer">
-        <p>☭ FangUnion — Союз Клыков © 2026 | Все хвосты защищены ☭</p>
+        <p>🐾 FangUnion © 2026 | Союз Клыков — пространство для фурри 🐾</p>
     </footer>
 
     <script>
-        const API = "http://localhost:8000/api";
+        const API = "http://127.0.0.1:8000/api";
 
         function showLogin() {
             document.getElementById("register-form").style.display = "none";
@@ -85,10 +100,11 @@
                 username: document.getElementById("reg-username").value.trim(),
                 password: document.getElementById("reg-password").value,
                 display_name: document.getElementById("reg-display").value.trim() || null,
-                species: document.getElementById("reg-species").value.trim() || null,
+                species: document.getElementById("reg-species").value || null,
+                bio: document.getElementById("reg-bio").value.trim() || null,
             };
             if (!data.username || !data.password) {
-                alert("Заполни позывной и пароль, товарищ!");
+                alert("Заполни позывной и пароль!");
                 return;
             }
             try {
@@ -98,7 +114,7 @@
                     body: JSON.stringify(data),
                 });
                 if (res.ok) {
-                    alert("Добро пожаловать в Союз Клыков! ☭");
+                    alert("Добро пожаловать в стаю! 🐾");
                     window.location.href = "index.html";
                 } else {
                     const err = await res.json();
@@ -125,37 +141,12 @@
                     localStorage.setItem("user_id", result.user_id);
                     window.location.href = "profile.html";
                 } else {
-                    alert("Неверные данные, товарищ!");
+                    alert("Неверные данные!");
                 }
             } catch (e) {
                 alert("Ошибка связи с сервером");
             }
         }
     </script>
-
-    <style>
-        .form-group {
-            margin-bottom: 12px;
-        }
-        .form-group label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 4px;
-            color: var(--brown);
-            font-size: 14px;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 8px 10px;
-            border: 2px solid var(--border);
-            border-radius: 4px;
-            font-family: inherit;
-            font-size: 14px;
-        }
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--red);
-        }
-    </style>
 </body>
 </html>

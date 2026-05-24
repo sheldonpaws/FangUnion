@@ -1,19 +1,38 @@
-/* ===== FangUnion — Ретро-коммунистический стиль ===== */
+/* ===== FangUnion — Союз Клыков ===== */
+/* Палитра: фиолетовый, серебристый, бархатно-чёрный */
 
 :root {
-    --red: #c41e3a;
-    --red-dark: #8b0000;
-    --red-light: #e84545;
-    --gold: #ffd700;
-    --gold-dark: #daa520;
-    --cream: #f5f0e1;
-    --cream-dark: #e8e0c8;
-    --brown: #3e2723;
-    --brown-light: #5d4037;
-    --text: #2c1810;
-    --text-light: #6d4c41;
-    --border: #8d6e63;
-    --bg: #f5f0e1;
+    --violet-deep: #2a1a3a;
+    --violet: #5c3d7a;
+    --violet-mid: #7a5a9e;
+    --violet-light: #9678b6;
+    --violet-pale: #c8a8e8;
+    --violet-white: #ede4f0;
+    --violet-whiter: #f4eef6;
+
+    --silver: #b8b0c0;
+    --silver-light: #d4cde0;
+    --silver-dark: #908898;
+
+    --black-velvet: #1a1220;
+    --black-soft: #241c2e;
+    --black-mid: #342840;
+
+    --text: #e8dff0;
+    --text-dark: #1a1220;
+    --text-muted: #b0a0c0;
+    --gold: #d4a853;
+    --accent: #a078b8;
+    --success: #6aab7e;
+    --error: #c05050;
+
+    --fur-1: rgba(92, 61, 122, 0.06);
+    --fur-2: rgba(148, 120, 182, 0.08);
+    --fur-3: rgba(92, 61, 122, 0.04);
+
+    --shadow: rgba(0, 0, 0, 0.3);
+    --shadow-light: rgba(0, 0, 0, 0.15);
+    --border-color: #4a3858;
 }
 
 * {
@@ -24,25 +43,53 @@
 
 body {
     font-family: 'Georgia', 'Times New Roman', serif;
-    background-color: var(--bg);
+    background-color: var(--black-velvet);
     color: var(--text);
+    min-height: 100vh;
+
+    /* Текстура шери — тонкие диагональные полоски */
     background-image:
         repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 40px,
-            rgba(196, 30, 58, 0.03) 40px,
-            rgba(196, 30, 58, 0.03) 41px
+            45deg,
+            var(--fur-1) 0px,
+            var(--fur-1) 2px,
+            transparent 2px,
+            transparent 8px
+        ),
+        repeating-linear-gradient(
+            -45deg,
+            var(--fur-2) 0px,
+            var(--fur-2) 2px,
+            transparent 2px,
+            transparent 12px
+        ),
+        linear-gradient(
+            180deg,
+            var(--black-velvet) 0%,
+            var(--black-soft) 50%,
+            var(--black-velvet) 100%
         );
-    min-height: 100vh;
+    background-attachment: fixed;
+}
+
+/* ===== Ссылки ===== */
+
+a {
+    color: var(--violet-pale);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: var(--gold);
 }
 
 /* ===== Header ===== */
 
 .header {
-    background: linear-gradient(135deg, var(--red) 0%, var(--red-dark) 100%);
-    border-bottom: 4px solid var(--gold);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    background: linear-gradient(135deg, var(--violet-deep) 0%, var(--black-mid) 100%);
+    border-bottom: 3px solid var(--violet-mid);
+    box-shadow: 0 4px 12px var(--shadow);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -51,7 +98,7 @@ body {
 .header-inner {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 12px 20px;
+    padding: 14px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -60,20 +107,20 @@ body {
 .logo {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    cursor: pointer;
 }
 
 .logo-icon {
     font-size: 28px;
-    color: var(--gold);
 }
 
 .logo-text {
     font-size: 24px;
     font-weight: bold;
-    color: var(--gold);
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    color: var(--violet-pale);
     letter-spacing: 2px;
+    text-shadow: 0 0 20px rgba(192, 168, 232, 0.4);
 }
 
 .nav {
@@ -82,133 +129,132 @@ body {
 }
 
 .nav-link {
-    color: var(--cream);
+    color: var(--silver);
     text-decoration: none;
     padding: 8px 16px;
-    border-radius: 4px;
+    border-radius: 6px;
     font-size: 14px;
     font-weight: bold;
-    transition: background 0.2s;
+    transition: all 0.2s;
 }
 
-.nav-link:hover,
+.nav-link:hover {
+    background: rgba(148, 120, 182, 0.15);
+    color: var(--violet-pale);
+}
+
 .nav-link.active {
-    background: rgba(255, 215, 0, 0.2);
+    background: rgba(148, 120, 182, 0.25);
     color: var(--gold);
+    border: 1px solid var(--violet-mid);
 }
 
 /* ===== Main Layout ===== */
 
 .main {
     max-width: 1200px;
-    margin: 20px auto;
+    margin: 24px auto;
     padding: 0 20px;
     display: grid;
-    grid-template-columns: 250px 1fr 250px;
+    grid-template-columns: 260px 1fr 260px;
     gap: 20px;
 }
 
 /* ===== Cards ===== */
 
 .card {
-    background: var(--cream);
-    border: 2px solid var(--border);
-    border-radius: 8px;
-    padding: 16px;
+    background: linear-gradient(135deg, var(--black-soft) 0%, var(--black-mid) 100%);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 18px;
     margin-bottom: 16px;
-    box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px var(--shadow);
     position: relative;
+    overflow: hidden;
 }
 
+/* Текстура шери на карточках — очень тонкая */
 .card::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--red), var(--gold), var(--red));
-    border-radius: 6px 6px 0 0;
+    bottom: 0;
+    background-image:
+        repeating-linear-gradient(
+            120deg,
+            transparent 0px,
+            transparent 3px,
+            var(--fur-3) 3px,
+            var(--fur-3) 4px
+        );
+    pointer-events: none;
+    opacity: 0.7;
+    border-radius: inherit;
+}
+
+.card > * {
+    position: relative;
+    z-index: 1;
 }
 
 .card-title {
     font-size: 16px;
     font-weight: bold;
-    color: var(--red-dark);
-    margin-bottom: 12px;
-    padding-bottom: 8px;
-    border-bottom: 1px dashed var(--border);
+    color: var(--violet-pale);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
 }
 
-/* ===== Feed ===== */
+/* ===== Формы ===== */
 
-.new-post textarea {
+.form-group {
+    margin-bottom: 14px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: var(--silver);
+    font-size: 13px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
     width: 100%;
-    min-height: 80px;
-    padding: 10px;
-    border: 2px solid var(--border);
-    border-radius: 4px;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: var(--black-velvet);
+    color: var(--text);
     font-family: inherit;
     font-size: 14px;
-    resize: vertical;
-    background: #fff;
+    transition: border-color 0.2s;
 }
 
-.new-post textarea:focus {
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
     outline: none;
-    border-color: var(--red);
+    border-color: var(--violet-light);
+    box-shadow: 0 0 8px rgba(148, 120, 182, 0.3);
 }
 
-.post {
-    padding: 16px;
-}
-
-.post-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
-}
-
-.post-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--red), var(--gold));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-}
-
-.post-author {
-    font-weight: bold;
-    color: var(--red-dark);
-}
-
-.post-date {
-    font-size: 12px;
-    color: var(--text-light);
-}
-
-.post-content {
-    font-size: 15px;
-    line-height: 1.6;
-    margin-bottom: 10px;
-}
-
-.post-image {
-    max-width: 100%;
-    border-radius: 4px;
-    border: 1px solid var(--border);
+.form-group textarea {
+    min-height: 80px;
+    resize: vertical;
 }
 
 /* ===== Buttons ===== */
 
 .btn {
-    padding: 8px 20px;
-    border: 2px solid;
-    border-radius: 4px;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 6px;
     font-family: inherit;
     font-size: 14px;
     font-weight: bold;
@@ -217,44 +263,161 @@ body {
 }
 
 .btn-primary {
-    background: var(--red);
-    color: var(--cream);
-    border-color: var(--red-dark);
+    background: linear-gradient(135deg, var(--violet-mid), var(--violet));
+    color: var(--text);
+    border: 1px solid var(--violet-light);
 }
 
 .btn-primary:hover {
-    background: var(--red-dark);
+    background: linear-gradient(135deg, var(--violet), var(--violet-light));
+    box-shadow: 0 2px 12px rgba(122, 90, 158, 0.4);
 }
 
 .btn-gold {
-    background: var(--gold);
-    color: var(--brown);
-    border-color: var(--gold-dark);
+    background: linear-gradient(135deg, var(--gold), #c09830);
+    color: var(--text-dark);
 }
 
 .btn-gold:hover {
-    background: var(--gold-dark);
+    box-shadow: 0 2px 12px rgba(212, 168, 83, 0.4);
 }
 
-/* ===== Sidebar ===== */
+.btn-danger {
+    background: linear-gradient(135deg, #8b3a3a, var(--error));
+    color: var(--text);
+}
 
-.statute {
-    padding-left: 20px;
-    font-size: 14px;
-    line-height: 1.8;
-    color: var(--text-light);
+/* ===== Feed ===== */
+
+.new-post textarea {
+    background: var(--black-velvet);
+    border: 1px solid var(--border-color);
+    color: var(--text);
+}
+
+.post {
+    padding: 18px;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.post-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--violet), var(--violet-deep));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    border: 2px solid var(--violet-mid);
+    flex-shrink: 0;
+}
+
+.post-author {
+    font-weight: bold;
+    color: var(--violet-pale);
+}
+
+.post-date {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.post-content {
+    font-size: 15px;
+    line-height: 1.7;
+    margin-bottom: 12px;
+}
+
+.post-image {
+    max-width: 100%;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+}
+
+/* ===== Асеты — карточки ===== */
+
+.asset-card {
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.asset-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px var(--shadow);
+}
+
+.asset-card img {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    border: 1px solid var(--border-color);
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* ===== Footer ===== */
 
 .footer {
-    background: var(--brown);
-    color: var(--cream);
+    background: var(--black-velvet);
+    border-top: 2px solid var(--border-color);
+    color: var(--text-muted);
     text-align: center;
-    padding: 16px;
+    padding: 18px;
     margin-top: 40px;
-    border-top: 4px solid var(--gold);
-    font-size: 14px;
+    font-size: 13px;
+}
+
+/* ===== Скроллбар (WebKit) ===== */
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--black-velvet);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--violet-mid);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--violet-light);
+}
+
+/* ===== Ретро-элементы (лёгкие) ===== */
+
+.retro-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: bold;
+    background: var(--violet-deep);
+    color: var(--silver);
+    border: 1px solid var(--violet-mid);
+}
+
+/* ===== Типы видов (species tags) ===== */
+
+.species-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    background: rgba(148, 120, 182, 0.2);
+    color: var(--violet-pale);
+    border: 1px solid var(--violet-mid);
 }
 
 /* ===== Responsive ===== */
@@ -267,4 +430,25 @@ body {
     .sidebar-right {
         display: none;
     }
+}
+
+/* ===== Анимации (мягкие) ===== */
+
+@media (prefers-reduced-motion: no-preference) {
+    .header {
+        animation: fadeInDown 0.5s ease;
+    }
+    .card {
+        animation: fadeIn 0.4s ease;
+    }
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }

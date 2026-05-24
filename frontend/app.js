@@ -1,21 +1,33 @@
 // ===== FangUnion — Союз Клыков =====
 
-const API = "http://localhost:8000/api";
+const API = "http://127.0.0.1:8000/api";
+
+function escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function formatDate(dateStr) {
+    return new Date(dateStr).toLocaleDateString("ru-RU", {
+        day: "numeric", month: "long", year: "numeric",
+        hour: "2-digit", minute: "2-digit",
+    });
+}
 
 // ===== Посты =====
 
 async function loadPosts() {
     try {
         const res = await fetch(`${API}/posts/`);
+        if (!res.ok) throw new Error("Ошибка сервера");
         const posts = await res.json();
         const container = document.getElementById("posts-container");
 
         if (posts.length === 0) {
             container.innerHTML = `
-                <div class="card">
-                    <p style="text-align:center; color: var(--text-light);">
-                        Лента пуста. Будь первым товарищем! ☭
-                    </p>
+                <div class="card" style="text-align:center;">
+                    <p style="color:var(--text-muted);">Лента пуста. Будь первым в стае! 🐾</p>
                 </div>`;
             return;
         }
@@ -30,7 +42,7 @@ async function loadPosts() {
                     </div>
                 </div>
                 <div class="post-content">${escapeHtml(post.content)}</div>
-                ${post.image_url ? `<img class="post-image" src="${escapeHtml(post.image_url)}" alt="Изображение">` : ""}
+                ${post.image_url ? `<img class="post-image" src="${escapeHtml(post.image_url)}" alt="">` : ""}
             </div>
         `).join("");
     } catch (err) {
@@ -40,13 +52,9 @@ async function loadPosts() {
 
 async function createPost() {
     const content = document.getElementById("post-content").value.trim();
-    if (!content) {
-        alert("Напиши что-нибудь, товарищ!");
-        return;
-    }
+    if (!content) { alert("Напиши что-нибудь!"); return; }
 
-    // TODO: заменить на реальный user_id из сессии
-    const authorId = 1;
+    const authorId = parseInt(localStorage.getItem("user_id")) || 1;
 
     try {
         const res = await fetch(`${API}/posts/?author_id=${authorId}`, {
@@ -57,29 +65,13 @@ async function createPost() {
         if (res.ok) {
             document.getElementById("post-content").value = "";
             loadPosts();
+        } else {
+            const err = await res.json();
+            alert(err.detail || "Ошибка");
         }
     } catch (err) {
-        console.error("Ошибка создания поста:", err);
+        alert("Ошибка связи с сервером");
     }
-}
-
-// ===== Утилиты =====
-
-function escapeHtml(text) {
-    const div = document.createElement("div");
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-function formatDate(dateStr) {
-    const d = new Date(dateStr);
-    return d.toLocaleDateString("ru-RU", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-    });
 }
 
 // ===== Инициализация =====

@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Асеты — FangUnion</title>
+    <title>Галерея — FangUnion</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header class="header">
         <div class="header-inner">
-            <div class="logo">
-                <span class="logo-icon">☭</span>
+            <div class="logo" onclick="location.href='index.html'">
+                <span class="logo-icon">🐾</span>
                 <span class="logo-text">FangUnion</span>
             </div>
             <nav class="nav">
                 <a href="index.html" class="nav-link">Лента</a>
-                <a href="assets.html" class="nav-link active">Асеты</a>
+                <a href="assets.html" class="nav-link active">Галерея</a>
                 <a href="profile.html" class="nav-link">Профиль</a>
             </nav>
         </div>
@@ -23,25 +23,25 @@
 
     <main class="main" style="grid-template-columns: 1fr;">
         <div class="card">
-            <h2 class="card-title">🎨 Народные асеты</h2>
-            <p>Здесь товарищи делятся артами, бейджами, рамками и другими ценностями Союза!</p>
+            <h2 class="card-title">🎨 Народная галерея</h2>
+            <p style="color:var(--text-muted);">Здесь члены стаи делятся артами, бейджами, рамками и другим творчеством.</p>
         </div>
 
-        <div class="card new-post">
+        <div class="card">
             <h3 class="card-title">➕ Поделиться с народом</h3>
             <div style="display:flex; gap:12px; flex-wrap:wrap;">
                 <div class="form-group" style="flex:1; min-width:200px;">
                     <label>Название</label>
                     <input type="text" id="asset-title" placeholder="Мой герб">
                 </div>
-                <div class="form-group" style="width:150px;">
+                <div class="form-group" style="width:160px;">
                     <label>Тип</label>
-                    <select id="asset-type" style="width:100%; padding:8px; border:2px solid var(--border); border-radius:4px;">
+                    <select id="asset-type">
                         <option value="art">Арт</option>
                         <option value="badge">Бейдж</option>
                         <option value="frame">Рамка</option>
                         <option value="emoji">Эмодзи</option>
-                        <option value="other">Другое</option>
+                        <option value="другое">Другое</option>
                     </select>
                 </div>
             </div>
@@ -51,68 +51,68 @@
             </div>
             <div class="form-group">
                 <label>Описание</label>
-                <textarea id="asset-desc" placeholder="Расскажи о своём творении..."></textarea>
+                <textarea id="asset-desc" placeholder="Расскажи о своём творении..." style="min-height:60px;"></textarea>
             </div>
-            <button class="btn btn-primary" onclick="createAsset()">Выставить на ярмарку!</button>
+            <button class="btn btn-primary" onclick="createAsset()">Выставить в галерею</button>
         </div>
 
-        <div id="assets-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap:16px;">
+        <div id="assets-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:16px;">
             <!-- Асеты -->
         </div>
     </main>
 
     <footer class="footer">
-        <p>☭ FangUnion — Союз Клыков © 2026 | Все хвосты защищены ☭</p>
+        <p>🐾 FangUnion © 2026 | Союз Клыков — пространство для фурри 🐾</p>
     </footer>
 
     <script>
-        const API = "http://localhost:8000/api";
+        const API = "http://127.0.0.1:8000/api";
+
+        function escapeHtml(text) {
+            const div = document.createElement("div");
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function typeLabel(t) {
+            const map = { 'art': '🎨 Арт', 'badge': '🏅 Бейдж', 'frame': '🖼️ Рамка', 'emoji': '😺 Эмодзи' };
+            return map[t] || `📦 ${t}`;
+        }
 
         async function loadAssets() {
             try {
                 const res = await fetch(`${API}/assets/`);
                 const assets = await res.json();
                 const container = document.getElementById("assets-grid");
-
                 if (assets.length === 0) {
-                    container.innerHTML = `
-                        <div class="card" style="grid-column:1/-1; text-align:center;">
-                            <p style="color:var(--text-light);">
-                                Ярмарка пуста. Будь первым мастером! ☭
-                            </p>
-                        </div>`;
+                    container.innerHTML = `<div class="card" style="grid-column:1/-1; text-align:center; color:var(--text-muted);">Галерея пуста. Будь первым! 🐾</div>`;
                     return;
                 }
-
                 container.innerHTML = assets.map(a => `
-                    <div class="card" style="text-align:center;">
-                        ${a.image_url ? `<img src="${escapeHtml(a.image_url)}" alt="" style="max-width:100%; max-height:200px; border-radius:4px; margin-bottom:8px;">` : ""}
-                        <h4 style="color:var(--red-dark);">${escapeHtml(a.title)}</h4>
-                        <p style="font-size:12px; color:var(--text-light);">${escapeHtml(a.asset_type || '')}</p>
-                        <p style="font-size:13px;">${escapeHtml(a.description || '')}</p>
-                        <p style="font-size:11px; color:var(--text-light); margin-top:4px;">Автор: ${escapeHtml(a.owner_username)}</p>
+                    <div class="card asset-card">
+                        ${a.image_url ? `<img src="${escapeHtml(a.image_url)}" alt="${escapeHtml(a.title)}">` : ""}
+                        <h4 style="color:var(--violet-pale); margin-bottom:4px;">${escapeHtml(a.title)}</h4>
+                        <span class="retro-badge" style="margin-bottom:8px;">${typeLabel(a.asset_type)}</span>
+                        `<p style="font-size:13px; color:var(--text-muted);">${escapeHtml(a.description || '')}</p>
+                        <p style="font-size:11px; color:var(--text-muted); margin-top:6px;">Автор: ${escapeHtml(a.owner_username)}</p>
                     </div>
                 `).join("");
             } catch (e) {
-                console.error("Ошибка загрузки асетов:", e);
+                console.error(e);
             }
         }
 
         async function createAsset() {
             const title = document.getElementById("asset-title").value.trim();
             const url = document.getElementById("asset-url").value.trim();
-            if (!title || !url) {
-                alert("Укажи название и ссылку, товарищ!");
-                return;
-            }
+            if (!title || !url) { alert("Укажи название и ссылку!"); return; }
             const ownerId = parseInt(localStorage.getItem("user_id")) || 1;
             try {
                 await fetch(`${API}/assets/?owner_id=${ownerId}`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        title,
-                        image_url: url,
+                        title, image_url: url,
                         description: document.getElementById("asset-desc").value.trim() || null,
                         asset_type: document.getElementById("asset-type").value,
                     }),
@@ -121,26 +121,10 @@
                 document.getElementById("asset-url").value = "";
                 document.getElementById("asset-desc").value = "";
                 loadAssets();
-            } catch (e) {
-                alert("Ошибка при отправке");
-            }
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement("div");
-            div.textContent = text;
-            return div.innerHTML;
+            } catch (e) { alert("Ошибка"); }
         }
 
         document.addEventListener("DOMContentLoaded", loadAssets);
     </script>
-
-    <style>
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display:block; font-weight:bold; margin-bottom:4px; color:var(--brown); font-size:14px; }
-        .form-group input, .form-group textarea { width:100%; padding:8px 10px; border:2px solid var(--border); border-radius:4px; font:inherit; font-size:14px; }
-        .form-group textarea { min-height:60px; resize:vertical; }
-        .form-group input:focus, .form-group textarea:focus { outline:none; border-color:var(--red); }
-    </style>
 </body>
 </html>
