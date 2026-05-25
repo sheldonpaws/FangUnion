@@ -19,7 +19,7 @@ def get_assets(db: Session = Depends(get_db)):
             image_url=a.image_url,
             asset_type=a.asset_type,
             owner_id=a.owner_id,
-            owner_username=a.owner.username,
+            owner_email=a.owner.email,
             created_at=a.created_at,
         ))
     return result
@@ -48,6 +48,6 @@ def create_asset(asset_data: AssetCreate, owner_id: int, db: Session = Depends(g
         image_url=asset.image_url,
         asset_type=asset.asset_type,
         owner_id=asset.owner_id,
-        owner_username=user.username,
+        owner_email=user.email,
         created_at=asset.created_at,
     )

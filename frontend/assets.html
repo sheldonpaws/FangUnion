@@ -94,7 +94,7 @@
                         <h4 style="color:var(--violet-pale); margin-bottom:4px;">${escapeHtml(a.title)}</h4>
                         <span class="retro-badge" style="margin-bottom:8px;">${typeLabel(a.asset_type)}</span>
                         `<p style="font-size:13px; color:var(--text-muted);">${escapeHtml(a.description || '')}</p>
-                        <p style="font-size:11px; color:var(--text-muted); margin-top:6px;">Автор: ${escapeHtml(a.owner_username)}</p>
+                        <p style="font-size:11px; color:var(--text-muted); margin-top:6px;">Автор: ${escapeHtml(a.owner_email)}</p>
                     </div>
                 `).join("");
             } catch (e) {

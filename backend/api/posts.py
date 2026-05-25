@@ -18,7 +18,7 @@ def get_feed(db: Session = Depends(get_db)):
             content=p.content,
             image_url=p.image_url,
             author_id=p.author_id,
-            author_username=p.author.username,
+            author_email=p.author.email,
             created_at=p.created_at,
         ))
     return result
@@ -45,7 +45,7 @@ def create_post(post_data: PostCreate, author_id: int, db: Session = Depends(get
         content=post.content,
         image_url=post.image_url,
         author_id=post.author_id,
-        author_username=user.username,
+        author_email=user.email,
         created_at=post.created_at,
     )
 

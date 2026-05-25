@@ -37,7 +37,7 @@ async function loadPosts() {
                 <div class="post-header">
                     <div class="post-avatar">🐾</div>
                     <div>
-                        <div class="post-author">${escapeHtml(post.author_username)}</div>
+                        <div class="post-author">${escapeHtml(post.author_email)}</div>
                         <div class="post-date">${formatDate(post.created_at)}</div>
                     </div>
                 </div>

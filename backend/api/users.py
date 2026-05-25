@@ -10,12 +10,12 @@ router = APIRouter(prefix="/users", tags=["users"])
 
 @router.post("/register", response_model=UserResponse)
 def register(user_data: UserCreate, db: Session = Depends(get_db)):
-    existing = db.query(User).filter(User.username == user_data.username).first()
+    existing = db.query(User).filter(User.email == user_data.email).first()
     if existing:
-        raise HTTPException(status_code=400, detail="Имя занято, товарищ!")
+        raise HTTPException(status_code=400, detail="Этот email уже зарегистрирован!")
 
     user = User(
-        username=user_data.username,
+        email=user_data.email,
         password_hash=generate_password_hash(user_data.password),
         display_name=user_data.display_name,
         species=user_data.species,
@@ -29,9 +29,9 @@ def register(user_data: UserCreate, db: Session = Depends(get_db)):
 
 @router.post("/login")
 def login(credentials: UserLogin, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.username == credentials.username).first()
+    user = db.query(User).filter(User.email == credentials.email).first()
     if not user or not check_password_hash(user.password_hash, credentials.password):
-        raise HTTPException(status_code=401, detail="Неверные данные, товарищ!")
+        raise HTTPException(status_code=401, detail="Неверный email или пароль!")
     return {"message": "Добро пожаловать в Союз Клыков!", "user_id": user.id}
 
 

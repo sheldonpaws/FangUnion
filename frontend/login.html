@@ -25,48 +25,10 @@
         <div class="card" style="width: 400px; margin-top: 40px;">
             <h2 class="card-title" style="text-align:center;">🐾 Войти в стаю</h2>
 
-            <div id="register-form">
+            <div id="login-form">
                 <div class="form-group">
-                    <label>Позывной (логин)</label>
-                    <input type="text" id="reg-username" placeholder="Волкодав">
-                </div>
-                <div class="form-group">
-                    <label>Пароль</label>
-                    <input type="password" id="reg-password" placeholder="Секретное слово">
-                </div>
-                <div class="form-group">
-                    <label>Имя</label>
-                    <input type="text" id="reg-display" placeholder="Серый Волк">
-                </div>
-                <div class="form-group">
-                    <label>Вид</label>
-                    <select id="reg-species">
-                        <option value="">— выбери вид —</option>
-                        <option value="Волк">Волк</option>
-                        <option value="Лиса">Лиса</option>
-                        <option value="Дракон">Дракон</option>
-                        <option value="Собака">Собака</option>
-                        <option value="Кошка">Кошка</option>
-                        <option value="Олень">Олень</option>
-                        <option value="Медведь">Медведь</option>
-                        <option value="Кролик">Кролик</option>
-                        <option value="Другое">Другое</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>О себе</label>
-                    <textarea id="reg-bio" placeholder="Расскажи немного о себе..." style="min-height:60px;"></textarea>
-                </div>
-                <button class="btn btn-primary" style="width:100%" onclick="register()">Вступить в стаю</button>
-                <p style="text-align:center; margin-top:14px; font-size:13px; color:var(--text-muted);">
-                    Уже в стае? <a href="#" onclick="showLogin()">Войти</a>
-                </p>
-            </div>
-
-            <div id="login-form" style="display:none;">
-                <div class="form-group">
-                    <label>Позывной</label>
-                    <input type="text" id="login-username">
+                    <label>Email</label>
+                    <input type="email" id="login-email" placeholder="your@email.com">
                 </div>
                 <div class="form-group">
                     <label>Пароль</label>
@@ -74,7 +36,7 @@
                 </div>
                 <button class="btn btn-gold" style="width:100%" onclick="login()">Войти</button>
                 <p style="text-align:center; margin-top:14px; font-size:13px; color:var(--text-muted);">
-                    Ещё не в стае? <a href="#" onclick="showRegister()">Вступить</a>
+                    Ещё не в стае? <a href="arrival.html">Вступить</a>
                 </p>
             </div>
         </div>
@@ -87,50 +49,15 @@
     <script>
         const API = "http://127.0.0.1:8000/api";
 
-        function showLogin() {
-            document.getElementById("register-form").style.display = "none";
-            document.getElementById("login-form").style.display = "block";
-        }
-        function showRegister() {
-            document.getElementById("login-form").style.display = "none";
-            document.getElementById("register-form").style.display = "block";
-        }
-
-        async function register() {
-            const data = {
-                username: document.getElementById("reg-username").value.trim(),
-                password: document.getElementById("reg-password").value,
-                display_name: document.getElementById("reg-display").value.trim() || null,
-                species: document.getElementById("reg-species").value || null,
-                bio: document.getElementById("reg-bio").value.trim() || null,
-            };
-            if (!data.username || !data.password) {
-                alert("Заполни позывной и пароль!");
-                return;
-            }
-            try {
-                const res = await fetch(`${API}/users/register`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(data),
-                });
-                if (res.ok) {
-                    alert("Добро пожаловать в стаю! 🐾");
-                    window.location.href = "index.html";
-                } else {
-                    const err = await res.json();
-                    alert(err.detail || "Ошибка регистрации");
-                }
-            } catch (e) {
-                alert("Ошибка связи с сервером");
-            }
-        }
-
         async function login() {
             const data = {
-                username: document.getElementById("login-username").value.trim(),
+                email: document.getElementById("login-email").value.trim(),
                 password: document.getElementById("login-password").value,
             };
+            if (!data.email || !data.password) {
+                alert("Заполни email и пароль!");
+                return;
+            }
             try {
                 const res = await fetch(`${API}/users/login`, {
                     method: "POST",
@@ -142,7 +69,7 @@
                     localStorage.setItem("user_id", result.user_id);
                     window.location.href = "profile.html";
                 } else {
-                    alert("Неверные данные!");
+                    alert("Неверный email или пароль!");
                 }
             } catch (e) {
                 alert("Ошибка связи с сервером");

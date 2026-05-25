@@ -6,7 +6,7 @@ from datetime import datetime
 # --- User ---
 
 class UserCreate(BaseModel):
-    username: str
+    email: str
     password: str
     display_name: Optional[str] = None
     species: Optional[str] = None
@@ -15,7 +15,7 @@ class UserCreate(BaseModel):
 
 class UserResponse(BaseModel):
     id: int
-    username: str
+    email: str
     display_name: Optional[str]
     species: Optional[str]
     bio: Optional[str]
@@ -27,7 +27,7 @@ class UserResponse(BaseModel):
 
 
 class UserLogin(BaseModel):
-    username: str
+    email: str
     password: str
 
 
@@ -45,7 +45,7 @@ class PostResponse(BaseModel):
     content: str
     image_url: Optional[str]
     author_id: int
-    author_username: str
+    author_email: str
     created_at: datetime
 
     class Config:
@@ -68,7 +68,7 @@ class AssetResponse(BaseModel):
     image_url: str
     asset_type: Optional[str]
     owner_id: int
-    owner_username: str
+    owner_email: str
     created_at: datetime
 
     class Config:

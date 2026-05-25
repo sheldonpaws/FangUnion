@@ -85,12 +85,12 @@
             try {
                 const res = await fetch(`${API}/users/${userId}`);
                 const user = await res.json();
-                document.getElementById("profile-name").textContent = user.display_name || user.username;
+                document.getElementById("profile-name").textContent = user.display_name || user.email;
                 document.getElementById("profile-species").textContent = user.species ? `Вид: ${user.species}` : "";
                 document.getElementById("profile-bio").textContent = user.bio || "Пока ничего о себе не написал.";
                 document.getElementById("stats").innerHTML = `
                     <p>📅 В стае с: <strong>${new Date(user.created_at).toLocaleDateString("ru-RU")}</strong></p>
-                    <p style="margin-top:4px;">🏷️ Позывной: <strong>${user.username}</strong></p>
+                    <p style="margin-top:4px;">📧 Email: <strong>${user.email}</strong></p>
                 `;
             } catch (e) {
                 console.error(e);
