@@ -107,20 +107,19 @@ a:hover {
 .logo {
     display: flex;
     align-items: center;
-    gap: 10px;
     cursor: pointer;
+    text-decoration: none;
 }
 
-.logo-icon {
-    font-size: 28px;
+.logo img {
+    height: 36px;
+    width: auto;
+    filter: drop-shadow(0 0 8px rgba(212, 168, 83, 0.3));
+    transition: filter 0.2s;
 }
 
-.logo-text {
-    font-size: 24px;
-    font-weight: bold;
-    color: var(--violet-pale);
-    letter-spacing: 2px;
-    text-shadow: 0 0 20px rgba(192, 168, 232, 0.4);
+.logo:hover img {
+    filter: drop-shadow(0 0 14px rgba(212, 168, 83, 0.5));
 }
 
 .nav {

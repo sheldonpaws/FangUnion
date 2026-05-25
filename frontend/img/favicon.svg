@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="favGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7a5a9e"/>
+      <stop offset="100%" style="stop-color:#2a1a3a"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="12" fill="url(#favGrad)"/>
+  <g transform="translate(32, 34)">
+    <ellipse cx="0" cy="10" rx="10" ry="8" fill="#d4a853"/>
+    <ellipse cx="-8" cy="1" rx="5" ry="6" fill="#d4a853"/>
+    <ellipse cx="-3" cy="-4" rx="5" ry="7" fill="#d4a853"/>
+    <ellipse cx="3" cy="-4" rx="5" ry="7" fill="#d4a853"/>
+    <ellipse cx="8" cy="1" rx="5" ry="6" fill="#d4a853"/>
+  </g>
+  <g fill="#d4cde0" opacity="0.7">
+    <polygon points="32,8 34,13 39,13 35,16 36,21 32,18 28,21 29,16 25,13 30,13" transform="scale(0.5) translate(32, 4)"/>
+    <polygon points="32,8 34,13 39,13 35,16 36,21 32,18 28,21 29,16 25,13 30,13" transform="scale(0.35) translate(10, 28)"/>
+    <polygon points="32,8 34,13 39,13 35,16 36,21 32,18 28,21 29,16 25,13 30,13" transform="scale(0.35) translate(78, 28)"/>
+  </g>
+</svg>
