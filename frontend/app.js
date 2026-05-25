@@ -35,7 +35,7 @@ async function loadPosts() {
         container.innerHTML = posts.map(post => `
             <div class="card post">
                 <div class="post-header">
-                    <div class="post-avatar">🐾</div>
+                    <div class="post-avatar">${post.author_avatar ? `<img src="${escapeHtml(post.author_avatar)}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">` : '🐾'}</div>
                     <div>
                         <div class="post-author">${escapeHtml(post.author_email)}</div>
                         <div class="post-date">${formatDate(post.created_at)}</div>

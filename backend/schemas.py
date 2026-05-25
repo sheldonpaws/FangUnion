@@ -19,7 +19,7 @@ class UserResponse(BaseModel):
     display_name: Optional[str]
     species: Optional[str]
     bio: Optional[str]
-    avatar_url: Optional[str]
+    avatar_url: Optional[str] = None
     created_at: datetime
 
     class Config:
@@ -46,6 +46,7 @@ class PostResponse(BaseModel):
     image_url: Optional[str]
     author_id: int
     author_email: str
+    author_avatar: Optional[str] = None
     created_at: datetime
 
     class Config:

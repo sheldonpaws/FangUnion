@@ -13,7 +13,7 @@ class User(Base):
     display_name = Column(String(100))
     species = Column(String(50))  # вид фурри-персонажа
     bio = Column(Text)
-    avatar_url = Column(String(255))
+    avatar_url = Column(String(500))
     created_at = Column(DateTime, default=datetime.utcnow)
 
     posts = relationship("Post", back_populates="author")

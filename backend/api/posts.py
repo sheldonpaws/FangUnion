@@ -19,6 +19,7 @@ def get_feed(db: Session = Depends(get_db)):
             image_url=p.image_url,
             author_id=p.author_id,
             author_email=p.author.email,
+            author_avatar=p.author.avatar_url,
             created_at=p.created_at,
         ))
     return result

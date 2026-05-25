@@ -25,7 +25,15 @@
     <main class="main" style="grid-template-columns: 300px 1fr;">
         <div>
             <div class="card" style="text-align:center;">
-                <div id="profile-avatar" style="
+                <img id="profile-avatar-img" src="" alt="" style="
+                    width: 100px; height: 100px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                    margin: 0 auto 14px;
+                    display: none;
+                    border: 2px solid var(--violet-light);
+                ">
+                <div id="profile-avatar-placeholder" style="
                     width: 100px; height: 100px;
                     border-radius: 50%;
                     background: linear-gradient(135deg, var(--violet-mid), var(--violet-deep));
@@ -88,6 +96,12 @@
                 document.getElementById("profile-name").textContent = user.display_name || user.email;
                 document.getElementById("profile-species").textContent = user.species ? `Вид: ${user.species}` : "";
                 document.getElementById("profile-bio").textContent = user.bio || "Пока ничего о себе не написал.";
+
+                if (user.avatar_url) {
+                    document.getElementById("profile-avatar-img").src = user.avatar_url;
+                    document.getElementById("profile-avatar-img").style.display = 'block';
+                    document.getElementById("profile-avatar-placeholder").style.display = 'none';
+                }
                 document.getElementById("stats").innerHTML = `
                     <p>📅 В стае с: <strong>${new Date(user.created_at).toLocaleDateString("ru-RU")}</strong></p>
                     <p style="margin-top:4px;">📧 Email: <strong>${user.email}</strong></p>

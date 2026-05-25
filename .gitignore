@@ -141,6 +141,7 @@ venv/
 env/
 *.db
 fangunion.db
+backend/uploads/
 
 # yarn v2
 .yarn/cache

@@ -93,6 +93,32 @@
             color: var(--text-muted);
             font-size: 14px;
         }
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 10px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--black-velvet);
+        }
+        .upload-area:hover {
+            border-color: var(--violet-light);
+            background: rgba(148, 120, 182, 0.08);
+        }
+        .upload-icon {
+            font-size: 32px;
+            margin-bottom: 6px;
+        }
+        .upload-text {
+            font-size: 14px;
+            color: var(--silver);
+        }
+        .upload-hint {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
     </style>
 </head>
 <body>
@@ -140,11 +166,24 @@
                 </div>
                 <div class="form-group">
                     <label>Вид *</label>
-                    <input type="text" id="reg-species" placeholder="Волк, лиса, дракон... или что-то своё">
+                    <input type="text" id="reg-species" placeholder="К какому виду принадлежишь?">
                 </div>
                 <div class="form-group">
                     <label>Расскажи о себе</label>
                     <textarea id="reg-bio" placeholder="Кто ты, откуда, чем занимаешься..." style="min-height:70px;"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Аватар</label>
+                    <div class="upload-area" onclick="document.getElementById('reg-avatar').click()">
+                        <div class="upload-icon">📷</div>
+                        <div class="upload-text">Нажми, чтобы загрузить фото</div>
+                        <div class="upload-hint">JPEG, PNG, GIF, WebP • до 5 МБ</div>
+                    </div>
+                    <input type="file" id="reg-avatar" accept="image/*" style="display:none" onchange="previewAvatar(this)">
+                    <div id="avatar-preview" style="margin-top:10px; display:none;">
+                        <img id="avatar-img" src="" alt="Предпросмотр" style="width:80px; height:80px; border-radius:50%; object-fit:cover; border:2px solid var(--violet-mid);">
+                        <span id="avatar-name" style="font-size:12px; color:var(--text-muted); margin-left:8px;"></span>
+                    </div>
                 </div>
 
                 <div class="btn-group">
@@ -221,16 +260,21 @@
                     <h3>🐾 ПАСПОРТ ГРАЖДАНИНА</h3>
                     <p style="color:var(--silver); font-size:12px; margin-bottom:12px;">СОЮЗ КЛЫКОВ — FANGUNION</p>
 
-                    <div style="text-align:left; font-size:14px; line-height:2;">
-                        <p><span style="color:var(--silver);">Email:</span> <strong id="preview-email"></strong></p>
-                        <p><span style="color:var(--silver);">Имя:</span> <strong id="preview-display"></strong></p>
-                        <p><span style="color:var(--silver);">Вид:</span> <strong id="preview-species"></strong></p>
-                        <p><span style="color:var(--silver);">Гражданство:</span> <strong>Союз Клыков</strong></p>
-                        <p><span style="color:var(--silver);">Дата выдачи:</span> <strong id="preview-date"></strong></p>
-                        <p><span style="color:var(--silver);">Номер:</span> <strong id="preview-number"></strong></p>
+                    <div style="display:flex; gap:16px; align-items:flex-start;">
+                        <div id="preview-avatar-wrap" style="flex-shrink:0; display:none;">
+                            <img id="preview-avatar-img" src="" alt="" style="width:70px; height:70px; border-radius:50%; object-fit:cover; border:2px solid var(--gold);">
+                        </div>
+                        <div style="flex:1; text-align:left; font-size:14px; line-height:2;">
+                            <p><span style="color:var(--silver);">Email:</span> <strong id="preview-email"></strong></p>
+                            <p><span style="color:var(--silver);">Имя:</span> <strong id="preview-display"></strong></p>
+                            <p><span style="color:var(--silver);">Вид:</span> <strong id="preview-species"></strong></p>
+                            <p><span style="color:var(--silver);">Гражданство:</span> <strong>Союз Клыков</strong></p>
+                            <p><span style="color:var(--silver);">Дата выдачи:</span> <strong id="preview-date"></strong></p>
+                            <p><span style="color:var(--silver);">Номер:</span> <strong id="preview-number"></strong></p>
+                        </div>
                     </div>
 
-                    <div class="species-badge" id="preview-species-badge"></div>
+                    <div class="species-badge" id="preview-species-badge" style="margin-top:10px;"></div>
                 </div>
 
                 <div class="btn-group">
@@ -309,15 +353,77 @@
             document.getElementById('preview-date').textContent = dateStr;
             document.getElementById('preview-number').textContent = number;
             document.getElementById('preview-species-badge').textContent = species;
+
+            // Показываем аватар в паспорте, если загружен
+            const avatarImg = document.getElementById('avatar-img');
+            if (avatarImg && avatarImg.src && !avatarImg.src.startsWith('data:')) {
+                document.getElementById('preview-avatar-img').src = avatarImg.src;
+                document.getElementById('preview-avatar-wrap').style.display = 'block';
+            } else if (avatarImg && avatarImg.src) {
+                document.getElementById('preview-avatar-img').src = avatarImg.src;
+                document.getElementById('preview-avatar-wrap').style.display = 'block';
+            }
+        }
+
+        let uploadedAvatarUrl = '';
+
+        function previewAvatar(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Файл слишком большой! Максимум 5 МБ.');
+                input.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('avatar-img').src = e.target.result;
+                document.getElementById('avatar-name').textContent = file.name;
+                document.getElementById('avatar-preview').style.display = 'flex';
+                document.getElementById('avatar-preview').style.alignItems = 'center';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function uploadAvatar() {
+            const input = document.getElementById('reg-avatar');
+            if (!input.files[0]) return '';
+
+            const formData = new FormData();
+            formData.append('file', input.files[0]);
+
+            try {
+                const res = await fetch(`${API}/upload`, {
+                    method: 'POST',
+                    body: formData,
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    return data.url;
+                } else {
+                    const err = await res.json();
+                    console.error('Ошибка загрузки:', err);
+                    return '';
+                }
+            } catch (e) {
+                console.error('Ошибка связи:', e);
+                return '';
+            }
         }
 
         async function submitRegistration() {
+            // Сначала загружаем аватар, если есть
+            uploadedAvatarUrl = await uploadAvatar();
+
             const data = {
                 email: document.getElementById('reg-email').value.trim(),
                 password: document.getElementById('reg-password').value,
                 display_name: document.getElementById('reg-display').value.trim() || null,
                 species: document.getElementById('reg-species').value.trim() || null,
                 bio: document.getElementById('reg-bio').value.trim() || null,
+                avatar_url: uploadedAvatarUrl || null,
             };
 
             try {
