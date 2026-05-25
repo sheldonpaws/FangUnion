@@ -169,6 +169,14 @@
                     <input type="text" id="reg-species" placeholder="К какому виду принадлежишь?">
                 </div>
                 <div class="form-group">
+                    <label>Дата начала пути в фурри-сообществе</label>
+                    <input type="text" id="reg-furry-since" placeholder="Хотя бы год">
+                </div>
+                <div class="form-group">
+                    <label>Профессия</label>
+                    <input type="text" id="reg-profession" placeholder="Чем можешь быть полезен в FangUnion?">
+                </div>
+                <div class="form-group">
                     <label>Расскажи о себе</label>
                     <textarea id="reg-bio" placeholder="Кто ты, откуда, чем занимаешься..." style="min-height:70px;"></textarea>
                 </div>
@@ -268,6 +276,8 @@
                             <p><span style="color:var(--silver);">Email:</span> <strong id="preview-email"></strong></p>
                             <p><span style="color:var(--silver);">Имя:</span> <strong id="preview-display"></strong></p>
                             <p><span style="color:var(--silver);">Вид:</span> <strong id="preview-species"></strong></p>
+                            <p><span style="color:var(--silver);">Путь в фурри с:</span> <strong id="preview-furry-since"></strong></p>
+                            <p><span style="color:var(--silver);">Профессия:</span> <strong id="preview-profession"></strong></p>
                             <p><span style="color:var(--silver);">Гражданство:</span> <strong>Союз Клыков</strong></p>
                             <p><span style="color:var(--silver);">Дата выдачи:</span> <strong id="preview-date"></strong></p>
                             <p><span style="color:var(--silver);">Номер:</span> <strong id="preview-number"></strong></p>
@@ -343,6 +353,8 @@
             const email = document.getElementById('reg-email').value.trim();
             const display = document.getElementById('reg-display').value.trim();
             const species = document.getElementById('reg-species').value.trim();
+            const furrySince = document.getElementById('reg-furry-since').value.trim();
+            const profession = document.getElementById('reg-profession').value.trim();
             const now = new Date();
             const dateStr = now.toLocaleDateString('ru-RU');
             const number = 'FK-' + String(Math.floor(Math.random() * 900000 + 100000));
@@ -350,16 +362,15 @@
             document.getElementById('preview-email').textContent = email;
             document.getElementById('preview-display').textContent = display;
             document.getElementById('preview-species').textContent = species;
+            document.getElementById('preview-furry-since').textContent = furrySince || '—';
+            document.getElementById('preview-profession').textContent = profession || '—';
             document.getElementById('preview-date').textContent = dateStr;
             document.getElementById('preview-number').textContent = number;
             document.getElementById('preview-species-badge').textContent = species;
 
             // Показываем аватар в паспорте, если загружен
             const avatarImg = document.getElementById('avatar-img');
-            if (avatarImg && avatarImg.src && !avatarImg.src.startsWith('data:')) {
-                document.getElementById('preview-avatar-img').src = avatarImg.src;
-                document.getElementById('preview-avatar-wrap').style.display = 'block';
-            } else if (avatarImg && avatarImg.src) {
+            if (avatarImg && avatarImg.src) {
                 document.getElementById('preview-avatar-img').src = avatarImg.src;
                 document.getElementById('preview-avatar-wrap').style.display = 'block';
             }
@@ -422,6 +433,8 @@
                 password: document.getElementById('reg-password').value,
                 display_name: document.getElementById('reg-display').value.trim() || null,
                 species: document.getElementById('reg-species').value.trim() || null,
+                furry_since: document.getElementById('reg-furry-since').value.trim() || null,
+                profession: document.getElementById('reg-profession').value.trim() || null,
                 bio: document.getElementById('reg-bio').value.trim() || null,
                 avatar_url: uploadedAvatarUrl || null,
             };

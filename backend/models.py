@@ -11,7 +11,9 @@ class User(Base):
     email = Column(String(120), unique=True, index=True, nullable=False)
     password_hash = Column(String(255), nullable=False)
     display_name = Column(String(100))
-    species = Column(String(50))  # вид фурри-персонажа
+    species = Column(String(50))
+    furry_since = Column(String(20))
+    profession = Column(String(100))
     bio = Column(Text)
     avatar_url = Column(String(500))
     created_at = Column(DateTime, default=datetime.utcnow)

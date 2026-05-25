@@ -105,6 +105,8 @@
                 document.getElementById("stats").innerHTML = `
                     <p>📅 В стае с: <strong>${new Date(user.created_at).toLocaleDateString("ru-RU")}</strong></p>
                     <p style="margin-top:4px;">📧 Email: <strong>${user.email}</strong></p>
+                    ${user.furry_since ? `<p style="margin-top:4px;">🐾 Путь в фурри с: <strong>${user.furry_since}</strong></p>` : ''}
+                    ${user.profession ? `<p style="margin-top:4px;">⚒️ Профессия: <strong>${user.profession}</strong></p>` : ''}
                 `;
             } catch (e) {
                 console.error(e);

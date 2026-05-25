@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240">
+  <defs>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#5c3d7a"/>
+      <stop offset="100%" style="stop-color:#2a1a3a"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#d4a853"/>
+      <stop offset="100%" style="stop-color:#b8922e"/>
+    </linearGradient>
+    <linearGradient id="silverGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#d4cde0"/>
+      <stop offset="100%" style="stop-color:#908898"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Щит -->
+  <path d="M100 10 L180 40 L180 120 C180 170 140 210 100 230 C60 210 20 170 20 120 L20 40 Z"
+        fill="url(#shieldGrad)" stroke="url(#goldGrad)" stroke-width="4"/>
+
+  <!-- Внутренняя кайма щита -->
+  <path d="M100 22 L168 48 L168 118 C168 162 132 198 100 214 C68 198 32 162 32 118 L32 48 Z"
+        fill="none" stroke="url(#goldGrad)" stroke-width="1.5" opacity="0.5"/>
+
+  <!-- Лапа (центральный символ) -->
+  <g transform="translate(100, 115)">
+    <!-- Подушечка -->
+    <ellipse cx="0" cy="25" rx="22" ry="18" fill="url(#goldGrad)"/>
+    <!-- Пальцы -->
+    <ellipse cx="-18" cy="5" rx="10" ry="12" fill="url(#goldGrad)"/>
+    <ellipse cx="-6" cy="-5" rx="10" ry="14" fill="url(#goldGrad)"/>
+    <ellipse cx="6" cy="-5" rx="10" ry="14" fill="url(#goldGrad)"/>
+    <ellipse cx="18" cy="5" rx="10" ry="12" fill="url(#goldGrad)"/>
+  </g>
+
+  <!-- Звёзды над лапой -->
+  <g fill="url(#silverGrad)">
+    <polygon points="100,52 103,60 111,60 105,65 107,73 100,68 93,73 95,65 89,60 97,60" transform="scale(0.7) translate(43, 22)"/>
+    <polygon points="100,52 103,60 111,60 105,65 107,73 100,68 93,73 95,65 89,60 97,60" transform="scale(0.5) translate(-30, 55)"/>
+    <polygon points="100,52 103,60 111,60 105,65 107,73 100,68 93,73 95,65 89,60 97,60" transform="scale(0.5) translate(195, 55)"/>
+  </g>
+
+  <!-- Свиток внизу -->
+  <path d="M50 195 Q100 210 150 195" fill="none" stroke="url(#goldGrad)" stroke-width="2"/>
+  <text x="100" y="205" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="url(#goldGrad)" font-weight="bold">FANGUNION</text>
+
+  <!-- Декоративные ленты по бокам -->
+  <path d="M25 80 Q15 100 20 130" fill="none" stroke="url(#goldGrad)" stroke-width="2" opacity="0.6"/>
+  <path d="M175 80 Q185 100 180 130" fill="none" stroke="url(#goldGrad)" stroke-width="2" opacity="0.6"/>
+</svg>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Символика — FangUnion</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .symbols-container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .symbol-card {
+            text-align: center;
+            padding: 30px;
+        }
+        .symbol-card svg {
+            max-width: 100%;
+            height: auto;
+        }
+        .symbol-title {
+            font-size: 20px;
+            color: var(--gold);
+            margin: 20px 0 10px;
+        }
+        .symbol-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.7;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .symbol-meaning {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+        .meaning-item {
+            background: var(--black-velvet);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 14px;
+            text-align: center;
+        }
+        .meaning-icon {
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
+        .meaning-label {
+            font-size: 12px;
+            color: var(--violet-pale);
+            font-weight: bold;
+        }
+        .meaning-text {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <div class="logo" onclick="location.href='index.html'">
+                <span class="logo-icon">🐾</span>
+                <span class="logo-text">FangUnion</span>
+            </div>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">Лента</a>
+                <a href="assets.html" class="nav-link">Галерея</a>
+                <a href="communities.html" class="nav-link">Сообщества</a>
+                <a href="symbols.html" class="nav-link active">Символика</a>
+                <a href="profile.html" class="nav-link">Профиль</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="symbols-container">
+        <div class="card">
+            <h2 class="card-title" style="text-align:center;">🐾 Государственная символика</h2>
+            <p style="text-align:center; color:var(--text-muted);">Союз Клыков — каждый символ несёт смысл и историю стаи.</p>
+        </div>
+
+        <!-- Герб -->
+        <div class="card symbol-card">
+            <img src="img/gerb.svg" alt="Герб Союза Клыков" style="max-width:260px;">
+            <div class="symbol-title">🛡️ Герб Союза Клыков</div>
+            <p class="symbol-desc">
+                Главный символ государства. Щит защищает ценности стаи,
+                а лапа в центре — единство всех видов под одним знаменем.
+            </p>
+            <div class="symbol-meaning">
+                <div class="meaning-item">
+                    <div class="meaning-icon">🛡️</div>
+                    <div class="meaning-label">Щит</div>
+                    <div class="meaning-text">Защита и единство стаи</div>
+                </div>
+                <div class="meaning-item">
+                    <div class="meaning-icon">🐾</div>
+                    <div class="meaning-label">Лапа</div>
+                    <div class="meaning-text">Все виды равны — от волка до дракона</div>
+                </div>
+                <div class="meaning-item">
+                    <div class="meaning-icon">⭐</div>
+                    <div class="meaning-label">Три звезды</div>
+                    <div class="meaning-text">Верность, творчество, свобода</div>
+                </div>
+                <div class="meaning-item">
+                    <div class="meaning-icon">💜</div>
+                    <div class="meaning-label">Фиолетовый</div>
+                    <div class="meaning-text">Мудрость и дух стаи</div>
+                </div>
+                <div class="meaning-item">
+                    <div class="meaning-icon">🥇</div>
+                    <div class="meaning-label">Золото</div>
+                    <div class="meaning-text">Ценность каждого члена стаи</div>
+                </div>
+                <div class="meaning-item">
+                    <div class="meaning-icon">🩶</div>
+                    <div class="meaning-label">Серебро</div>
+                    <div class="meaning-text">Чистота намерений</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Флаг -->
+        <div class="card symbol-card">
+            <img src="img/flag.svg" alt="Флаг Союза Клыков" style="max-width:340px; border-radius:6px;">
+            <div class="symbol-title">🏳️ Флаг Союза Клыков</div>
+            <p class="symbol-desc">
+                Государственное знамя. Фиолетовое полотнище с золотой каймой
+                и гербом в центре — символ гордости и принадлежности к стае.
+            </p>
+            <div class="symbol-meaning">
+                <div class="meaning-item">
+                    <div class="meaning-icon">💜</div>
+                    <div class="meaning-label">Фиолетовое поле</div>
+                    <div class="meaning-text">Глубина духа и единство</div>
+                </div>
+                <div class="meaning-item">
+                    <div class="meaning-icon">✨</div>
+                    <div class="meaning-label">Золотая кайма</div>
+                    <div class="meaning-text">Богатство культуры и творчества</div>
+                </div>
+                <div class="meaning-item">
+                    <div class="meaning-icon">🧶</div>
+                    <div class="meaning-label">Текстура шерсти</div>
+                    <div class="meaning-text">Тепло и уют стаи</div>
+                </div>
+                <div class="meaning-item">
+                    <div class="meaning-icon">🐾</div>
+                    <div class="meaning-label">Герб на флаге</div>
+                    <div class="meaning-text">Идентичность и гордость</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Девиз -->
+        <div class="card symbol-card">
+            <div style="font-size:48px; margin-bottom:10px;">📜</div>
+            <div class="symbol-title">Девиз Союза</div>
+            <p style="font-size:22px; color:var(--gold); font-style:italic; margin:16px 0;">
+                «Все клыки — одна стая»
+            </p>
+            <p class="symbol-desc">
+                Главный девиз Союза Клыков. Напоминает, что независимо от вида,
+                происхождения или хвоста — мы все часть одной большой семьи.
+            </p>
+        </div>
+
+        <!-- Цвета государства -->
+        <div class="card">
+            <h3 class="card-title">🎨 Государственные цвета</h3>
+            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:16px; margin-top:16px;">
+                <div style="text-align:center;">
+                    <div style="width:80px; height:80px; border-radius:50%; background:#5c3d7a; margin:0 auto 8px; border:2px solid var(--border-color);"></div>
+                    <div style="font-size:13px; color:var(--violet-pale); font-weight:bold;">Фиолетовый</div>
+                    <div style="font-size:11px; color:var(--text-muted);">#5c3d7a</div>
+                    <div style="font-size:11px; color:var(--text-muted);">Мудрость</div>
+                </div>
+                <div style="text-align:center;">
+                    <div style="width:80px; height:80px; border-radius:50%; background:#d4a853; margin:0 auto 8px; border:2px solid var(--border-color);"></div>
+                    <div style="font-size:13px; color:var(--gold); font-weight:bold;">Золотой</div>
+                    <div style="font-size:11px; color:var(--text-muted);">#d4a853</div>
+                    <div style="font-size:11px; color:var(--text-muted);">Ценность</div>
+                </div>
+                <div style="text-align:center;">
+                    <div style="width:80px; height:80px; border-radius:50%; background:#1a1220; margin:0 auto 8px; border:2px solid var(--border-color);"></div>
+                    <div style="font-size:13px; color:var(--silver); font-weight:bold;">Бархатно-чёрный</div>
+                    <div style="font-size:11px; color:var(--text-muted);">#1a1220</div>
+                    <div style="font-size:11px; color:var(--text-muted);">Глубина</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>🐾 FangUnion © 2026 | Союз Клыков — пространство для фурри 🐾</p>
+    </footer>
+</body>
+</html>

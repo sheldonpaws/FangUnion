@@ -10,7 +10,10 @@ class UserCreate(BaseModel):
     password: str
     display_name: Optional[str] = None
     species: Optional[str] = None
+    furry_since: Optional[str] = None
+    profession: Optional[str] = None
     bio: Optional[str] = None
+    avatar_url: Optional[str] = None
 
 
 class UserResponse(BaseModel):
@@ -18,6 +21,8 @@ class UserResponse(BaseModel):
     email: str
     display_name: Optional[str]
     species: Optional[str]
+    furry_since: Optional[str] = None
+    profession: Optional[str] = None
     bio: Optional[str]
     avatar_url: Optional[str] = None
     created_at: datetime

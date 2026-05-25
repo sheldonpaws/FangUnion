@@ -19,7 +19,10 @@ def register(user_data: UserCreate, db: Session = Depends(get_db)):
         password_hash=generate_password_hash(user_data.password),
         display_name=user_data.display_name,
         species=user_data.species,
+        furry_since=user_data.furry_since,
+        profession=user_data.profession,
         bio=user_data.bio,
+        avatar_url=user_data.avatar_url,
     )
     db.add(user)
     db.commit()
