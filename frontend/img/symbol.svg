@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="sFG" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#a090a8"/>
+      <stop offset="50%" style="stop-color:#d4cde0"/>
+      <stop offset="100%" style="stop-color:#f0e8f8"/>
+    </linearGradient>
+    <linearGradient id="sCG" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0a0810"/>
+      <stop offset="50%" style="stop-color:#2a2038"/>
+      <stop offset="100%" style="stop-color:#3a2848"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(16,16) scale(0.42)">
+    <g transform="rotate(-25)">
+      <path d="M-5 42 Q-7 30 -4 18 Q-2 8 -4 -5 Q-6 -18 -3 -30 Q0 -38 2 -42 Q4 -38 5 -30 Q8 -18 6 -5 Q4 8 6 18 Q8 30 5 42 Z"
+            fill="url(#sFG)" stroke="#b0a0b8" stroke-width="1.2"/>
+    </g>
+    <g transform="rotate(25)">
+      <path d="M5 42 Q7 30 4 18 Q2 8 4 -5 Q6 -18 3 -30 Q0 -38 -2 -42 Q-4 -38 -5 -30 Q-8 -18 -6 -5 Q-4 8 -6 18 Q-8 30 -5 42 Z"
+            fill="url(#sCG)" stroke="#1a1220" stroke-width="1.8"/>
+    </g>
+  </g>
+</svg>

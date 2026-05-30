@@ -1,21 +1,41 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <defs>
-    <linearGradient id="favGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="favBG" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#7a5a9e"/>
       <stop offset="100%" style="stop-color:#2a1a3a"/>
     </linearGradient>
+    <linearGradient id="favGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#d4a853"/>
+      <stop offset="100%" style="stop-color:#b8922e"/>
+    </linearGradient>
+    <linearGradient id="fFG" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#a090a8"/>
+      <stop offset="100%" style="stop-color:#f0e8f8"/>
+    </linearGradient>
+    <linearGradient id="fCG" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0a0810"/>
+      <stop offset="100%" style="stop-color:#3a2848"/>
+    </linearGradient>
   </defs>
-  <rect width="64" height="64" rx="12" fill="url(#favGrad)"/>
-  <g transform="translate(32, 34)">
-    <ellipse cx="0" cy="10" rx="10" ry="8" fill="#d4a853"/>
-    <ellipse cx="-8" cy="1" rx="5" ry="6" fill="#d4a853"/>
-    <ellipse cx="-3" cy="-4" rx="5" ry="7" fill="#d4a853"/>
-    <ellipse cx="3" cy="-4" rx="5" ry="7" fill="#d4a853"/>
-    <ellipse cx="8" cy="1" rx="5" ry="6" fill="#d4a853"/>
-  </g>
-  <g fill="#d4cde0" opacity="0.7">
-    <polygon points="32,8 34,13 39,13 35,16 36,21 32,18 28,21 29,16 25,13 30,13" transform="scale(0.5) translate(32, 4)"/>
-    <polygon points="32,8 34,13 39,13 35,16 36,21 32,18 28,21 29,16 25,13 30,13" transform="scale(0.35) translate(10, 28)"/>
-    <polygon points="32,8 34,13 39,13 35,16 36,21 32,18 28,21 29,16 25,13 30,13" transform="scale(0.35) translate(78, 28)"/>
+
+  <!-- Фон -->
+  <rect width="64" height="64" rx="10" fill="url(#favBG)"/>
+
+  <!-- Щит (как в лого, масштабирован) -->
+  <g transform="translate(32, 33)">
+    <path d="M0 -26 L22 -16 L22 8 C22 22 12 32 0 38 C-12 32 -22 22 -22 8 L-22 -16 Z"
+          fill="url(#favBG)" stroke="url(#favGold)" stroke-width="2.5"/>
+
+    <!-- Клык и коготь внутри щита (scale 0.35 как в лого) -->
+    <g transform="scale(0.35)">
+      <g transform="rotate(-25)">
+        <path d="M-5 42 Q-7 30 -4 18 Q-2 8 -4 -5 Q-6 -18 -3 -30 Q0 -38 2 -42 Q4 -38 5 -30 Q8 -18 6 -5 Q4 8 6 18 Q8 30 5 42 Z"
+              fill="url(#fFG)" stroke="#b0a0b8" stroke-width="1.2"/>
+      </g>
+      <g transform="rotate(25)">
+        <path d="M5 42 Q7 30 4 18 Q2 8 4 -5 Q6 -18 3 -30 Q0 -38 -2 -42 Q-4 -38 -5 -30 Q-8 -18 -6 -5 Q-4 8 -6 18 Q-8 30 -5 42 Z"
+              fill="url(#fCG)" stroke="#1a1220" stroke-width="1.8"/>
+      </g>
+    </g>
   </g>
 </svg>

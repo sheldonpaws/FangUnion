@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 230">
   <defs>
     <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#5c3d7a"/>
@@ -12,6 +12,16 @@
       <stop offset="0%" style="stop-color:#d4cde0"/>
       <stop offset="100%" style="stop-color:#908898"/>
     </linearGradient>
+    <linearGradient id="fangGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#a090a8"/>
+      <stop offset="50%" style="stop-color:#d4cde0"/>
+      <stop offset="100%" style="stop-color:#f0e8f8"/>
+    </linearGradient>
+    <linearGradient id="clawGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0a0810"/>
+      <stop offset="50%" style="stop-color:#2a2038"/>
+      <stop offset="100%" style="stop-color:#3a2848"/>
+    </linearGradient>
   </defs>
 
   <!-- Щит -->
@@ -22,27 +32,36 @@
   <path d="M100 22 L168 48 L168 118 C168 162 132 198 100 214 C68 198 32 162 32 118 L32 48 Z"
         fill="none" stroke="url(#goldGrad)" stroke-width="1.5" opacity="0.5"/>
 
-  <!-- Лапа (центральный символ) -->
-  <g transform="translate(100, 115)">
-    <!-- Подушечка -->
-    <ellipse cx="0" cy="25" rx="22" ry="18" fill="url(#goldGrad)"/>
-    <!-- Пальцы -->
-    <ellipse cx="-18" cy="5" rx="10" ry="12" fill="url(#goldGrad)"/>
-    <ellipse cx="-6" cy="-5" rx="10" ry="14" fill="url(#goldGrad)"/>
-    <ellipse cx="6" cy="-5" rx="10" ry="14" fill="url(#goldGrad)"/>
-    <ellipse cx="18" cy="5" rx="10" ry="12" fill="url(#goldGrad)"/>
+  <!-- Центральный символ: перекрещённые белый клык и чёрный коготь -->
+  <g transform="translate(100, 112) scale(0.65)">
+
+    <!-- Клык (белый/серебристый) — слева направо вниз, повёрнут на -25° -->
+    <g transform="rotate(-25)">
+      <path d="M-5 42 Q-7 30 -4 18 Q-2 8 -4 -5 Q-6 -18 -3 -30 Q0 -38 2 -42 Q4 -38 5 -30 Q8 -18 6 -5 Q4 8 6 18 Q8 30 5 42 Z"
+            fill="url(#fangGrad)" stroke="#b0a0b8" stroke-width="1"/>
+      <path d="M-2 35 Q-3 20 -1 5 Q1 -8 0 -20 Q-1 -30 1 -35"
+            fill="none" stroke="#f0e8f8" stroke-width="1.5" opacity="0.5" stroke-linecap="round"/>
+    </g>
+
+    <!-- Коготь (чёрный) — справа налево вниз, повёрнут на 25° -->
+    <g transform="rotate(25)">
+      <path d="M5 42 Q7 30 4 18 Q2 8 4 -5 Q6 -18 3 -30 Q0 -38 -2 -42 Q-4 -38 -5 -30 Q-8 -18 -6 -5 Q-4 8 -6 18 Q-8 30 -5 42 Z"
+            fill="url(#clawGrad)" stroke="#1a1220" stroke-width="1.5"/>
+      <path d="M2 35 Q3 20 1 5 Q-1 -8 0 -20 Q1 -30 -1 -35"
+            fill="none" stroke="#4a3858" stroke-width="1.5" opacity="0.4" stroke-linecap="round"/>
+    </g>
+
   </g>
 
-  <!-- Звёзды над лапой -->
+  <!-- Звёзды над символом -->
   <g fill="url(#silverGrad)">
     <polygon points="100,52 103,60 111,60 105,65 107,73 100,68 93,73 95,65 89,60 97,60" transform="scale(0.7) translate(43, 22)"/>
     <polygon points="100,52 103,60 111,60 105,65 107,73 100,68 93,73 95,65 89,60 97,60" transform="scale(0.5) translate(-30, 55)"/>
     <polygon points="100,52 103,60 111,60 105,65 107,73 100,68 93,73 95,65 89,60 97,60" transform="scale(0.5) translate(195, 55)"/>
   </g>
 
-  <!-- Свиток внизу -->
-  <path d="M50 195 Q100 210 150 195" fill="none" stroke="url(#goldGrad)" stroke-width="2"/>
-  <text x="100" y="205" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="url(#goldGrad)" font-weight="bold">FANGUNION</text>
+  <!-- Надпись под звёздами -->
+  <text x="100" y="82" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="url(#goldGrad)" font-weight="bold" letter-spacing="1.5">FANG UNION</text>
 
   <!-- Декоративные ленты по бокам -->
   <path d="M25 80 Q15 100 20 130" fill="none" stroke="url(#goldGrad)" stroke-width="2" opacity="0.6"/>

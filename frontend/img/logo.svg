@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 48">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 48">
   <defs>
     <linearGradient id="logoViolet" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#7a5a9e"/>
@@ -8,32 +8,39 @@
       <stop offset="0%" style="stop-color:#d4a853"/>
       <stop offset="100%" style="stop-color:#b8922e"/>
     </linearGradient>
+    <linearGradient id="lFG" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#a090a8"/>
+      <stop offset="100%" style="stop-color:#f0e8f8"/>
+    </linearGradient>
+    <linearGradient id="lCG" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0a0810"/>
+      <stop offset="100%" style="stop-color:#3a2848"/>
+    </linearGradient>
   </defs>
 
-  <!-- Иконка — щит с лапой -->
+  <!-- Иконка — перекрещённые клык и коготь в щите -->
   <g transform="translate(4, 4)">
+    <!-- Щит -->
     <path d="M20 2 L36 8 L36 28 C36 36 28 42 20 46 C12 42 4 36 4 28 L4 8 Z"
           fill="url(#logoViolet)" stroke="url(#logoGold)" stroke-width="2"/>
-    <g transform="translate(20, 24)">
-      <ellipse cx="0" cy="6" rx="7" ry="5" fill="url(#logoGold)"/>
-      <ellipse cx="-5" cy="0" rx="3.5" ry="4" fill="url(#logoGold)"/>
-      <ellipse cx="-1.5" cy="-3" rx="3.5" ry="4.5" fill="url(#logoGold)"/>
-      <ellipse cx="1.5" cy="-3" rx="3.5" ry="4.5" fill="url(#logoGold)"/>
-      <ellipse cx="5" cy="0" rx="3.5" ry="4" fill="url(#logoGold)"/>
-    </g>
-    <g fill="#d4cde0" opacity="0.6">
-      <polygon points="20,10 21,13 24,13 22,15 22.5,18 20,16 17.5,18 18,15 16,13 19,13"
-               transform="translate(-12, -2) scale(0.4)"/>
-      <polygon points="20,10 21,13 24,13 22,15 22.5,18 20,16 17.5,18 18,15 16,13 19,13"
-               transform="translate(12, -2) scale(0.4)"/>
+    <!-- Клык и коготь внутри щита -->
+    <g transform="translate(20, 24) scale(0.35)">
+      <g transform="rotate(-25)">
+        <path d="M-5 42 Q-7 30 -4 18 Q-2 8 -4 -5 Q-6 -18 -3 -30 Q0 -38 2 -42 Q4 -38 5 -30 Q8 -18 6 -5 Q4 8 6 18 Q8 30 5 42 Z"
+              fill="url(#lFG)" stroke="#b0a0b8" stroke-width="1.2"/>
+      </g>
+      <g transform="rotate(25)">
+        <path d="M5 42 Q7 30 4 18 Q2 8 4 -5 Q6 -18 3 -30 Q0 -38 -2 -42 Q-4 -38 -5 -30 Q-8 -18 -6 -5 Q-4 8 -6 18 Q-8 30 -5 42 Z"
+              fill="url(#lCG)" stroke="#1a1220" stroke-width="1.8"/>
+      </g>
     </g>
   </g>
 
-  <!-- Текст FANGUNION -->
-  <text x="52" y="32" font-family="Georgia, 'Times New Roman', serif" font-size="22"
-        font-weight="bold" fill="url(#logoGold)" letter-spacing="2">FANGUNION</text>
+  <!-- Текст FANG UNION -->
+  <text x="56" y="32" font-family="Georgia, 'Times New Roman', serif" font-size="24"
+        font-weight="bold" fill="url(#logoGold)" letter-spacing="4">FANG UNION</text>
 
   <!-- Подпись -->
-  <text x="52" y="44" font-family="Georgia, 'Times New Roman', serif" font-size="8"
-        fill="#908898" letter-spacing="1.5">СОЮЗ КЛЫКОВ</text>
+  <text x="56" y="44" font-family="Georgia, 'Times New Roman', serif" font-size="9"
+        fill="#908898" letter-spacing="2">СОЮЗ КЛЫКОВ</text>
 </svg>

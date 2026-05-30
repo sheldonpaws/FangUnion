@@ -74,6 +74,14 @@ body {
 
 /* ===== Ссылки ===== */
 
+/* ===== Символ клык+коготь ===== */
+.icon-symbol {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
+}
+
 a {
     color: var(--violet-pale);
     text-decoration: none;
