@@ -10,9 +10,10 @@ class UserCreate(BaseModel):
     password: str
     display_name: Optional[str] = None
     species: Optional[str] = None
-    furry_since: Optional[str] = None
+    birth_year: Optional[str] = None
+    birth_place: Optional[str] = None
+    form: Optional[str] = None
     profession: Optional[str] = None
-    bio: Optional[str] = None
     avatar_url: Optional[str] = None
 
 
@@ -21,10 +22,15 @@ class UserResponse(BaseModel):
     email: str
     display_name: Optional[str]
     species: Optional[str]
-    furry_since: Optional[str] = None
+    birth_year: Optional[str] = None
+    birth_place: Optional[str] = None
+    form: Optional[str] = None
     profession: Optional[str] = None
-    bio: Optional[str]
     avatar_url: Optional[str] = None
+    backstory: Optional[str] = ""
+    biography: Optional[str] = ""
+    aforism: Optional[str] = ""
+    passport_number: Optional[str] = None
     created_at: datetime
 
     class Config:
@@ -33,6 +39,7 @@ class UserResponse(BaseModel):
 
 class UserLogin(BaseModel):
     email: str
+    passport_number: str
     password: str
 
 

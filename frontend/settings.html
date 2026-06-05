@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Настройки — FangUnion</title>
+    <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <div class="logo" onclick="location.href='index.html'">
+                <img src="img/logo.svg" alt="FangUnion" style="height:36px;">
+            </div>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">Лента</a>
+                <a href="assets.html" class="nav-link">Галерея</a>
+                <a href="profile.html" class="nav-link">Профиль</a>
+                <a href="settings.html" class="nav-link active">Настройки</a>
+                <a href="#" class="nav-link" onclick="logout()">Выйти</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main" style="max-width: 600px; grid-template-columns: 1fr;">
+        <div class="card">
+            <h2 class="card-title" style="margin-bottom:20px;">Настройки профиля</h2>
+
+            <div class="form-group">
+                <label>Аватар</label>
+                <input type="file" id="set-avatar-input" accept="image/*" onchange="uploadSettingsAvatar(this)">
+                <p style="font-size:11px; color:var(--text-muted); margin-top:4px;">JPEG, PNG, GIF, WebP • до 5 МБ</p>
+                <p id="avatar-msg" style="font-size:12px; margin-top:4px;"></p>
+            </div>
+
+            <div class="form-group">
+                <label>Профессия</label>
+                <input type="text" id="set-profession" placeholder="Чем ты занимаешься?">
+            </div>
+
+            <div class="form-group">
+                <label>Афоризм</label>
+                <input type="text" id="set-aforism" placeholder="Любимая цитата или девиз...">
+            </div>
+
+            <div class="form-group" style="position:relative;">
+                <label>Предыстория</label>
+                <textarea id="set-backstory" rows="4" placeholder="Предыстория твоей фурсоны..." style="width:100%; resize:vertical; min-height:80px;"></textarea>
+            </div>
+
+            <div class="form-group" style="position:relative;">
+                <label>Биография</label>
+                <textarea id="set-biography" rows="4" placeholder="Расскажи о своей фурсоне..." style="width:100%; resize:vertical; min-height:80px;"></textarea>
+                <button class="btn btn-primary" onclick="saveSettings()" style="margin-top:8px;">Сохранить</button>
+                <p id="settings-msg" style="font-size:12px; margin-top:6px;"></p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 class="card-title" style="margin-bottom:16px;">Смена пароля</h3>
+            <div class="form-group">
+                <label>Текущий пароль</label>
+                <input type="password" id="set-old-password" placeholder="Введи текущий пароль">
+            </div>
+            <div class="form-group">
+                <label>Новый пароль</label>
+                <input type="password" id="set-new-password" placeholder="Придумай новый пароль">
+            </div>
+            <button class="btn btn-gold" onclick="changePassword()" style="width:100%;">Сменить пароль</button>
+            <p id="password-msg" style="font-size:12px; margin-top:8px; text-align:center;"></p>
+        </div>
+
+        <div class="card">
+            <h3 class="card-title" style="margin-bottom:16px;">Данные аккаунта</h3>
+            <p style="font-size:13px; color:var(--text-muted); margin-bottom:8px;">
+                <span style="color:var(--silver);">Email:</span> <span id="set-email"></span>
+            </p>
+            <p style="font-size:13px; color:var(--text-muted); margin-bottom:8px;">
+                <span style="color:var(--silver);">Номер паспорта:</span> <span id="set-passport" style="color:var(--gold);"></span>
+            </p>
+            <p style="font-size:13px; color:var(--text-muted);">
+                <span style="color:var(--silver);">В стае с:</span> <span id="set-created"></span>
+            </p>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>FangUnion © 2026 | Союз Клыков — пространство для фурри</p>
+    </footer>
+
+    <script>
+        const API = "http://127.0.0.1:8000/api";
+        const userId = localStorage.getItem("user_id");
+
+        if (!userId) {
+            window.location.href = "login.html";
+        }
+
+        const formMap = { anthro: 'Антропоморф', zoo: 'Зооморф', wave: 'Ампвейв', synt: 'Синт', proto: 'Протоген' };
+
+        async function loadSettings() {
+            try {
+                const res = await fetch(`${API}/users/${userId}`);
+                const user = await res.json();
+                document.getElementById("set-profession").value = user.profession || "";
+                document.getElementById("set-aforism").value = user.aforism || "";
+                document.getElementById("set-backstory").value = user.backstory || "";
+                document.getElementById("set-biography").value = user.biography || "";
+
+                document.getElementById("set-email").textContent = user.email || "—";
+                document.getElementById("set-passport").textContent = user.passport_number || "—";
+                document.getElementById("set-created").textContent = new Date(user.created_at).toLocaleDateString("ru-RU");
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function saveSettings() {
+            const data = {
+                profession: document.getElementById("set-profession").value.trim() || null,
+                aforism: document.getElementById("set-aforism").value.trim() || "",
+                backstory: document.getElementById("set-backstory").value.trim() || "",
+                biography: document.getElementById("set-biography").value.trim() || "",
+            };
+
+            try {
+                const res = await fetch(`${API}/users/${userId}`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data),
+                });
+                if (res.ok) {
+                    document.getElementById("settings-msg").textContent = "Сохранено!";
+                    document.getElementById("settings-msg").style.color = "var(--success)";
+                    // Обновляем текст в профиле если он открыт
+                    const bio = document.getElementById("set-bio").value.trim();
+                    localStorage.setItem('profile_bio', bio);
+                } else {
+                    const err = await res.json();
+                    document.getElementById("settings-msg").textContent = err.detail || "Ошибка сохранения";
+                    document.getElementById("settings-msg").style.color = "var(--error)";
+                }
+            } catch (e) {
+                document.getElementById("settings-msg").textContent = "Ошибка связи с сервером";
+                document.getElementById("settings-msg").style.color = "var(--error)";
+            }
+        }
+
+        async function changePassword() {
+            const oldPass = document.getElementById("set-old-password").value;
+            const newPass = document.getElementById("set-new-password").value;
+            if (!oldPass || !newPass) {
+                document.getElementById("password-msg").textContent = "Заполни оба поля";
+                document.getElementById("password-msg").style.color = "var(--error)";
+                return;
+            }
+            try {
+                const res = await fetch(`${API}/users/${userId}/password`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ old_password: oldPass, new_password: newPass }),
+                });
+                if (res.ok) {
+                    document.getElementById("password-msg").textContent = "Пароль изменён!";
+                    document.getElementById("password-msg").style.color = "var(--success)";
+                    document.getElementById("set-old-password").value = "";
+                    document.getElementById("set-new-password").value = "";
+                } else {
+                    const err = await res.json();
+                    document.getElementById("password-msg").textContent = err.detail || "Ошибка";
+                    document.getElementById("password-msg").style.color = "var(--error)";
+                }
+            } catch (e) {
+                document.getElementById("password-msg").textContent = "Ошибка связи с сервером";
+                document.getElementById("password-msg").style.color = "var(--error)";
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem("user_id");
+            window.location.href = "login.html";
+        }
+
+        async function uploadSettingsAvatar(input) {
+            const file = input.files[0];
+            if (!file) return;
+            if (file.size > 5 * 1024 * 1024) { alert('Максимум 5 МБ'); input.value = ''; return; }
+
+            const formData = new FormData();
+            formData.append('file', file);
+            try {
+                const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
+                if (res.ok) {
+                    const data = await res.json();
+                    await fetch(`${API}/users/${userId}/avatar`, {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ avatar_url: data.url }),
+                    });
+                    document.getElementById('avatar-msg').textContent = 'Аватар обновлён!';
+                    document.getElementById('avatar-msg').style.color = 'var(--success)';
+                    // Сохраняем в localStorage чтобы аватар сразу подгрузился в профиле
+                    localStorage.setItem('avatar_url', data.url);
+                } else {
+                    document.getElementById('avatar-msg').textContent = 'Ошибка загрузки';
+                    document.getElementById('avatar-msg').style.color = 'var(--error)';
+                }
+            } catch (e) {
+                document.getElementById('avatar-msg').textContent = 'Ошибка связи с сервером';
+                document.getElementById('avatar-msg').style.color = 'var(--error)';
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", loadSettings);
+    </script>
+</body>
+</html>

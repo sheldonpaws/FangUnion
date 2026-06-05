@@ -5,8 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Въезд в Союз — FangUnion</title>
     <link rel="icon" type="image/svg+xml" href="img/favicon.svg?v=2">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <style>
+        .required-star {
+            color: var(--red-light);
+            font-weight: bold;
+        }
         .arrival-container {
             max-width: 600px;
             margin: 30px auto;
@@ -73,6 +78,26 @@
             position: absolute;
             right: 20px;
             bottom: 10px;
+        }
+        .passport-watermark {
+            position: absolute;
+            opacity: 0.07;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .passport-watermark-gerb {
+            top: 10px;
+            right: 14px;
+            width: 120px;
+        }
+        .passport-watermark-flag {
+            bottom: 10px;
+            left: 14px;
+            width: 100px;
+        }
+        .passport-content {
+            position: relative;
+            z-index: 1;
         }
         .btn-group {
             display: flex;
@@ -142,6 +167,7 @@
             <div class="step-dot" id="dot-2">2</div>
             <div class="step-dot" id="dot-3">3</div>
             <div class="step-dot" id="dot-4">4</div>
+            <div class="step-dot" id="dot-5">5</div>
         </div>
 
         <!-- Шаг 1: Таможенная декларация -->
@@ -152,36 +178,63 @@
                     <p>Добро пожаловать на границу Союза Клыков! Заполни декларацию для въезда.</p>
                 </div>
 
+                <div style="margin-bottom:20px; padding:14px; background:rgba(148,120,182,0.08); border:1px solid var(--border-color); border-radius:8px;">
+                    <div style="font-size:13px; color:var(--violet-pale); font-weight:bold; margin-bottom:10px;">Данные для входа</div>
+                    <p style="font-size:11px; color:var(--text-muted); margin-bottom:12px;">Эта информация видна только тебе и не отображается в паспорте.</p>
+                    <div class="form-group">
+                        <label>Email&nbsp;<span style="color:#e84545;font-weight:bold;">*</span></label>
+                        <input type="email" id="reg-email" placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Пароль&nbsp;<span style="color:#e84545;font-weight:bold;">*</span></label>
+                        <input type="password" id="reg-password" placeholder="Придумай надёжный пароль">
+                    </div>
+                </div>
+
+                <div style="margin:20px 0 16px; padding:14px; background:rgba(212,168,83,0.06); border:1px solid var(--gold); border-radius:8px;">
+                    <div style="font-size:13px; color:var(--gold); font-weight:bold; margin-bottom:12px;">Для паспорта</div>
+                    <div class="form-group">
+                        <label>Имя&nbsp;<span style="color:#e84545;font-weight:bold;">*</span></label>
+                        <input type="text" id="reg-display" placeholder="Какое имя у твоей фурсоны?">
+                    </div>
+                    <div class="form-group">
+                        <label>Год рождения <span style="color:#e84545;font-weight:bold;">*</span></label>
+                        <input type="text" id="reg-birth-year" placeholder="Полная дата или год рождения твоей фурсоны">
+                    </div>
+                    <div class="form-group">
+                        <label>Место рождения&nbsp;<span style="color:#e84545;font-weight:bold;">*</span></label>
+                        <input type="text" id="reg-birth-place" placeholder="Страна и место рождения твоей фурсоны">
+                    </div>
                 <div class="form-group">
-                    <label>Email *</label>
-                    <input type="email" id="reg-email" placeholder="your@email.com">
+                    <label>Вид&nbsp;<span style="color:#e84545;font-weight:bold;">*</span></label>
+                    <input type="text" id="reg-species" placeholder="К какому виду принадлежит твоя фурсона?">
                 </div>
                 <div class="form-group">
-                    <label>Пароль *</label>
-                    <input type="password" id="reg-password" placeholder="Придумай надёжный пароль">
+                    <label>Форма&nbsp;<span style="color:#e84545;font-weight:bold;">*</span></label>
+                    <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:8px;">
+                        <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+                            <input type="checkbox" name="reg-form" value="anthro"> Антропоморф
+                        </label>
+                        <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+                            <input type="checkbox" name="reg-form" value="zoo"> Зооморф
+                        </label>
+                        <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+                            <input type="checkbox" name="reg-form" value="wave"> Ампвейв
+                        </label>
+                        <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+                            <input type="checkbox" name="reg-form" value="synt"> Синт
+                        </label>
+                        <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+                            <input type="checkbox" name="reg-form" value="proto"> Протоген
+                        </label>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label>Имя для паспорта *</label>
-                    <input type="text" id="reg-display" placeholder="Как тебя будут звать в Союзе?">
-                </div>
-                <div class="form-group">
-                    <label>Вид *</label>
-                    <input type="text" id="reg-species" placeholder="К какому виду принадлежишь?">
-                </div>
-                <div class="form-group">
-                    <label>Дата начала пути в фурри-сообществе</label>
-                    <input type="text" id="reg-furry-since" placeholder="Хотя бы год">
-                </div>
-                <div class="form-group">
-                    <label>Профессия</label>
+                    <label>Профессия&nbsp;<span style="color:#e84545;font-weight:bold;">*</span></label>
                     <input type="text" id="reg-profession" placeholder="Чем можешь быть полезен в FangUnion?">
                 </div>
                 <div class="form-group">
-                    <label>Расскажи о себе</label>
-                    <textarea id="reg-bio" placeholder="Кто ты, откуда, чем занимаешься..." style="min-height:70px;"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Фото на паспорт</label>
+                    <label>Фото на паспорт&nbsp;<span style="color:#e84545;font-weight:bold;">*</span></label>
                     <div style="display:flex; gap:16px; align-items:flex-start;">
                         <!-- Пример фото -->
                         <div style="flex-shrink:0; text-align:center;">
@@ -202,6 +255,7 @@
                         </div>
                     </div>
                 </div>
+                </div>
 
                 <div class="btn-group">
                     <button class="btn btn-primary" onclick="nextStep(2)">Далее →</button>
@@ -212,108 +266,199 @@
             </div>
         </div>
 
-        <!-- Шаг 2: Ознакомление с Конституцией -->
+        <!-- Шаг 2: Конституция Союза -->
         <div class="arrival-step" id="step-2">
             <div class="card">
                 <div class="welcome-text">
-                    <h2>📜 Конституция Союза</h2>
+                    <h2>Конституция Союза</h2>
                     <p>Каждый гражданин должен знать и принять основные законы.</p>
                 </div>
 
-                <div style="max-height:300px; overflow-y:auto; padding:12px; background:var(--black-velvet); border-radius:6px; border:1px solid var(--border-color); margin-bottom:16px;">
-                    <h4 style="color:var(--gold); margin-bottom:10px;">📖 Конституция Союза Клыков</h4>
-                    <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">Принята Шерстяным Советом. Действует для всех граждан без исключения.</p>
+                <div style="max-height:350px; overflow-y:auto; padding:16px; background:var(--black-velvet); border-radius:6px; border:1px solid var(--border-color); margin-bottom:16px; text-align:left;">
+                    <h4 style="color:var(--gold); margin-bottom:10px; text-align:center;">Конституция Союза Клыков</h4>
+                    <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px; text-align:center;">Принята Шерстяным Советом. Действует для всех граждан без исключения.</p>
 
-                    <h5 style="color:var(--violet-pale); margin-bottom:6px;">Глава I. Основы</h5>
+                    <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px; padding:10px; background:rgba(148,120,182,0.08); border-left:3px solid var(--violet-mid); border-radius:0 4px 4px 0;">Мы, граждане Союза Клыков, объединённые общими ценностями творчества, уважения и верности, принимаем настоящую Конституцию как основной закон нашего государства.</p>
+
+                    <h5 style="color:var(--violet-pale); margin-bottom:6px; margin-top:14px;">Глава I. Основы</h5>
                     <ol style="padding-left:18px; font-size:13px; color:var(--text-muted); line-height:1.8;">
                         <li>Союз Клыков — равное сообщество всех видов.</li>
                         <li>Каждый член стаи имеет право на уважение и защиту.</li>
                         <li>Ни один вид не выше другого — все клыки равны.</li>
+                        <li>Государственными цветами являются фиолетовый, золотой, бархатно-чёрный и серебристый.</li>
                     </ol>
 
-                    <h5 style="color:var(--violet-pale); margin-bottom:6px; margin-top:12px;">Глава II. Права граждан</h5>
+                    <h5 style="color:var(--violet-pale); margin-bottom:6px; margin-top:14px;">Глава II. Права граждан</h5>
                     <ol style="padding-left:18px; font-size:13px; color:var(--text-muted); line-height:1.8;">
                         <li>Право на творчество и самовыражение.</li>
                         <li>Право на участие в жизни стаи.</li>
                         <li>Право на справедливый суд.</li>
-                        <li>Право на неприкосновенность хвоста.</li>
+                        <li>Право на неприкосновенность личного пространства.</li>
                         <li>Право на тишину и покой.</li>
                     </ol>
 
-                    <h5 style="color:var(--violet-pale); margin-bottom:6px; margin-top:12px;">Глава III. Обязанности</h5>
+                    <h5 style="color:var(--violet-pale); margin-bottom:6px; margin-top:14px;">Глава III. Обязанности</h5>
                     <ol style="padding-left:18px; font-size:13px; color:var(--text-muted); line-height:1.8;">
                         <li>Уважать других членов стаи.</li>
                         <li>Не нарушать покой обитателей.</li>
                         <li>Делиться добром и помогать новичкам.</li>
                         <li>Соблюдать законы Союза.</li>
+                        <li>Хранить и беречь символику государства.</li>
                     </ol>
 
-                    <h5 style="color:var(--violet-pale); margin-bottom:6px; margin-top:12px;">Глава IV. Управление</h5>
+                    <h5 style="color:var(--violet-pale); margin-bottom:6px; margin-top:14px;">Глава IV. Управление</h5>
                     <ol style="padding-left:18px; font-size:13px; color:var(--text-muted); line-height:1.8;">
-                        <li>Вожак стаи — глава Союза.</li>
-                        <li>Советники помогают в управлении.</li>
-                        <li>Шерстяной Совет принимает законы.</li>
-                        <li>Хвостатый Суд разрешает споры.</li>
+                        <li>Вожак стаи — глава Союза, гарант Конституции.</li>
+                        <li>Шерстяной Совет — законодательный орган.</li>
+                        <li>Хвостатый Суд — судебный орган.</li>
+                        <li>Клыковое Казначейство управляет экономикой.</li>
                     </ol>
+
+                    <h5 style="color:var(--violet-pale); margin-bottom:6px; margin-top:14px;">Глава V. Заключительные положения</h5>
+                    <ol style="padding-left:18px; font-size:13px; color:var(--text-muted); line-height:1.8;">
+                        <li>Конституция вступает в силу с момента принятия.</li>
+                        <li>Изменения вносятся Шерстяным Советом.</li>
+                        <li>Ни один закон не может противоречить Конституции.</li>
+                    </ol>
+                </div>
+
+                <div style="margin-bottom:16px; padding:14px; background:rgba(148,120,182,0.08); border:1px solid var(--border-color); border-radius:8px;">
+                    <label style="display:flex; align-items:flex-start; gap:10px; cursor:pointer; font-size:13px; color:var(--silver); line-height:1.5;">
+                        <input type="checkbox" id="accept-constitution" onchange="document.getElementById('btn-step2-next').disabled = !this.checked;" style="margin-top:2px;">
+                        <span>Я ознакомился с Конституцией Союза Клыков и принимаю её как основной закон нашего государства.</span>
+                    </label>
                 </div>
 
                 <div class="btn-group">
                     <button class="btn" style="background:var(--black-mid); color:var(--text-muted); border:1px solid var(--border-color);" onclick="prevStep(1)">← Назад</button>
-                    <button class="btn btn-primary" onclick="nextStep(3)">Далее →</button>
+                    <button class="btn btn-primary" id="btn-step2-next" onclick="nextStep(3)" disabled>Далее →</button>
                 </div>
             </div>
         </div>
 
-        <!-- Шаг 3: Паспортный стол -->
+        <!-- Шаг 3: Символика государства -->
         <div class="arrival-step" id="step-3">
             <div class="card">
                 <div class="welcome-text">
-                    <h2>📋 Паспортный стол</h2>
+                    <h2>Символика государства</h2>
+                    <p>Ознакомься с символами Союза Клыков.</p>
+                </div>
+
+                <div style="text-align:center; margin-bottom:16px;">
+                    <img src="img/gerb.svg" alt="Герб" style="max-width:200px; margin-bottom:8px;">
+                    <p style="font-size:12px; color:var(--text-muted);">Герб Союза Клыков</p>
+                </div>
+
+                <div style="text-align:center; margin-bottom:16px;">
+                    <img src="img/flag.svg" alt="Флаг" style="max-width:240px; border-radius:4px; margin-bottom:8px;">
+                    <p style="font-size:12px; color:var(--text-muted);">Флаг Союза Клыков</p>
+                </div>
+
+                <div style="text-align:left; font-size:13px; color:var(--text-muted); line-height:1.7; padding:10px; background:var(--black-velvet); border-radius:6px; border:1px solid var(--border-color);">
+                    <p><strong style="color:var(--violet-pale);">Герб:</strong> Фиолетовый щит — мудрость и защита. Перекрещённые клык и коготь — сила и единство всех видов. Три звезды — верность, творчество, свобода. Золотое окаймление — ценность.</p>
+                    <p style="margin-top:8px;"><strong style="color:var(--violet-pale);">Флаг:</strong> Три полосы — мудрость, ценность, глубина. Серебристый крест — единство всех видов.</p>
+                </div>
+
+                <div style="margin-bottom:16px; padding:14px; background:rgba(148,120,182,0.08); border:1px solid var(--border-color); border-radius:8px;">
+                    <label style="display:flex; align-items:flex-start; gap:10px; cursor:pointer; font-size:13px; color:var(--silver); line-height:1.5;">
+                        <input type="checkbox" id="accept-symbols" onchange="document.getElementById('btn-step3-next').disabled = !this.checked;" style="margin-top:2px;">
+                        <span>Я ознакомился с государственной символикой Союза Клыков и принимаю её ценности.</span>
+                    </label>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn" style="background:var(--black-mid); color:var(--text-muted); border:1px solid var(--border-color);" onclick="prevStep(2)">← Назад</button>
+                    <button class="btn btn-primary" id="btn-step3-next" onclick="nextStep(4)" disabled>Далее →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Шаг 4: Паспортный стол -->
+        <div class="arrival-step" id="step-4">
+            <div class="card">
+                <div class="welcome-text">
+                    <h2>Паспортный стол</h2>
                     <p>Проверь данные и получи паспорт гражданина.</p>
                 </div>
 
                 <div class="passport-preview" style="position:relative;">
-                    <div class="passport-stamp">🐾</div>
-                    <h3>🐾 ПАСПОРТ ГРАЖДАНИНА</h3>
-                    <p style="color:var(--silver); font-size:12px; margin-bottom:12px;">СОЮЗ КЛЫКОВ — FANGUNION</p>
+                    <img src="img/gerb.svg" alt="" class="passport-watermark passport-watermark-gerb">
+                    <img src="img/flag.svg" alt="" class="passport-watermark passport-watermark-flag">
+
+                    <div class="passport-content">
+                    <h3>ПАСПОРТ ГРАЖДАНИНА</h3>
+                    <p style="color:var(--silver); font-size:12px; margin-bottom:12px;">СОЮЗ КЛЫКОВ — FANG UNION</p>
 
                     <div style="display:flex; gap:16px; align-items:flex-start;">
                         <div id="preview-avatar-wrap" style="flex-shrink:0; display:none;">
                             <img id="preview-avatar-img" src="" alt="" style="width:70px; height:70px; border-radius:50%; object-fit:cover; border:2px solid var(--gold);">
                         </div>
                         <div style="flex:1; text-align:left; font-size:14px; line-height:2;">
-                            <p><span style="color:var(--silver);">Email:</span> <strong id="preview-email"></strong></p>
                             <p><span style="color:var(--silver);">Имя:</span> <strong id="preview-display"></strong></p>
                             <p><span style="color:var(--silver);">Вид:</span> <strong id="preview-species"></strong></p>
-                            <p><span style="color:var(--silver);">Путь в фурри с:</span> <strong id="preview-furry-since"></strong></p>
+                            <p><span style="color:var(--silver);">Год рождения:</span> <strong id="preview-birth-year"></strong></p>
+                            <p><span style="color:var(--silver);">Место рождения:</span> <strong id="preview-birth-place"></strong></p>
+                            <p><span style="color:var(--silver);">Форма:</span> <strong id="preview-form"></strong></p>
                             <p><span style="color:var(--silver);">Профессия:</span> <strong id="preview-profession"></strong></p>
                             <p><span style="color:var(--silver);">Гражданство:</span> <strong>Союз Клыков</strong></p>
                             <p><span style="color:var(--silver);">Дата выдачи:</span> <strong id="preview-date"></strong></p>
-                            <p><span style="color:var(--silver);">Номер:</span> <strong id="preview-number"></strong></p>
+                            <p><span style="color:var(--silver);">Номер:</span> <strong style="color:var(--text-muted); font-style:italic;">будет присвоен</strong></p>
                         </div>
                     </div>
 
                     <div class="species-badge" id="preview-species-badge" style="margin-top:10px;"></div>
+                    </div>
                 </div>
 
                 <div class="btn-group">
-                    <button class="btn" style="background:var(--black-mid); color:var(--text-muted); border:1px solid var(--border-color);" onclick="prevStep(2)">← Назад</button>
-                    <button class="btn btn-gold" onclick="submitRegistration()">Получить паспорт 🐾</button>
+                    <button class="btn" style="background:var(--black-mid); color:var(--text-muted); border:1px solid var(--border-color);" onclick="prevStep(3)">← Назад</button>
+                    <button class="btn btn-gold" onclick="submitRegistration()">Получить паспорт</button>
                 </div>
             </div>
         </div>
 
-        <!-- Шаг 4: Добро пожаловать -->
-        <div class="arrival-step" id="step-4">
+        <!-- Шаг 5: Паспорт готов -->
+        <div class="arrival-step" id="step-5">
             <div class="card" style="text-align:center; padding:40px 24px;">
                 <h2 style="color:var(--gold); margin-bottom:10px;">Добро пожаловать в Союз!</h2>
                 <p style="color:var(--text-muted); margin-bottom:8px;">Теперь ты — гражданин Союза Клыков.</p>
-                <p style="color:var(--text-muted); font-size:13px; margin-bottom:24px;">Твой паспорт готов. Исследуй стаю, знакомься, твори!</p>
+                <p style="color:var(--text-muted); font-size:13px; margin-bottom:24px;">Твой паспорт готов. Сохрани его!</p>
+            </div>
 
-                <div style="display:flex; flex-direction:column; gap:10px;">
-                    <button class="btn btn-primary" onclick="location.href='index.html'">На главную</button>
-                    <button class="btn btn-gold" onclick="location.href='profile.html'">Мой профиль</button>
+            <!-- Паспорт для скачивания -->
+            <div class="passport-preview" id="final-passport" style="position:relative;">
+                <img src="img/gerb.svg" alt="" class="passport-watermark passport-watermark-gerb">
+                <img src="img/flag.svg" alt="" class="passport-watermark passport-watermark-flag">
+
+                <div class="passport-content">
+                    <h3>ПАСПОРТ ГРАЖДАНИНА</h3>
+                    <p style="color:var(--silver); font-size:12px; margin-bottom:12px;">СОЮЗ КЛЫКОВ — FANG UNION</p>
+
+                    <div style="display:flex; gap:16px; align-items:flex-start;">
+                        <div id="final-avatar-wrap" style="flex-shrink:0; display:none;">
+                            <img id="final-avatar-img" src="" alt="" style="width:70px; height:70px; border-radius:50%; object-fit:cover; border:2px solid var(--gold);">
+                        </div>
+                        <div style="flex:1; text-align:left; font-size:14px; line-height:2;">
+                            <p><span style="color:var(--silver);">Имя:</span> <strong id="final-display"></strong></p>
+                            <p><span style="color:var(--silver);">Вид:</span> <strong id="final-species"></strong></p>
+                            <p><span style="color:var(--silver);">Год рождения:</span> <strong id="final-birth-year"></strong></p>
+                            <p><span style="color:var(--silver);">Место рождения:</span> <strong id="final-birth-place"></strong></p>
+                            <p><span style="color:var(--silver);">Форма:</span> <strong id="final-form"></strong></p>
+                            <p><span style="color:var(--silver);">Профессия:</span> <strong id="final-profession"></strong></p>
+                            <p><span style="color:var(--silver);">Гражданство:</span> <strong>Союз Клыков</strong></p>
+                            <p><span style="color:var(--silver);">Дата выдачи:</span> <strong id="final-date"></strong></p>
+                            <p><span style="color:var(--silver);">Номер:</span> <strong id="final-number" style="color:var(--gold);"></strong></p>
+                        </div>
+                    </div>
+
+                    <div class="species-badge" id="final-species-badge" style="margin-top:10px;"></div>
                 </div>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">
+                <button class="btn btn-gold" onclick="downloadPassport()">Скачать паспорт</button>
+                <button class="btn btn-primary" onclick="location.href='index.html'">На главную</button>
+                <button class="btn" style="background:var(--black-mid); color:var(--silver); border:1px solid var(--border-color);" onclick="location.href='profile.html'">Мой профиль</button>
             </div>
         </div>
     </div>
@@ -328,11 +473,20 @@
         function showStep(n) {
             document.querySelectorAll('.arrival-step').forEach(s => s.classList.remove('active'));
             document.getElementById('step-' + n).classList.add('active');
-            for (let i = 1; i <= 4; i++) {
+            for (let i = 1; i <= 5; i++) {
                 const dot = document.getElementById('dot-' + i);
                 dot.classList.remove('active', 'done');
                 if (i < n) dot.classList.add('done');
                 if (i === n) dot.classList.add('active');
+            }
+            // Сброс чекбоксов при переходе на другой шаг
+            if (n !== 2) {
+                const cb2 = document.getElementById('accept-constitution');
+                if (cb2) { cb2.checked = false; document.getElementById('btn-step2-next').disabled = true; }
+            }
+            if (n !== 3) {
+                const cb3 = document.getElementById('accept-symbols');
+                if (cb3) { cb3.checked = false; document.getElementById('btn-step3-next').disabled = true; }
             }
         }
 
@@ -342,7 +496,12 @@
                 const password = document.getElementById('reg-password').value;
                 const display = document.getElementById('reg-display').value.trim();
                 const species = document.getElementById('reg-species').value.trim();
-                if (!email || !password || !display || !species) {
+                const birthYear = document.getElementById('reg-birth-year').value.trim();
+                const birthPlace = document.getElementById('reg-birth-place').value.trim();
+                const profession = document.getElementById('reg-profession').value.trim();
+                const avatar = document.getElementById('reg-avatar').files[0];
+                const formChecked = document.querySelectorAll('input[name="reg-form"]:checked').length > 0;
+                if (!email || !password || !display || !species || !birthYear || !birthPlace || !profession || !avatar || !formChecked) {
                     alert('Заполни все обязательные поля!');
                     return;
                 }
@@ -357,23 +516,30 @@
             showStep(n);
         }
 
+        function getFormLabels() {
+            const map = { anthro: 'Антропоморф', zoo: 'Зооморф', wave: 'Ампвейв', synt: 'Синт', proto: 'Протоген' };
+            return Array.from(document.querySelectorAll('input[name="reg-form"]:checked'))
+                .map(cb => map[cb.value] || cb.value)
+                .join(', ');
+        }
+
         function fillPreview() {
-            const email = document.getElementById('reg-email').value.trim();
             const display = document.getElementById('reg-display').value.trim();
             const species = document.getElementById('reg-species').value.trim();
-            const furrySince = document.getElementById('reg-furry-since').value.trim();
+            const birthYear = document.getElementById('reg-birth-year').value.trim();
+            const birthPlace = document.getElementById('reg-birth-place').value.trim();
             const profession = document.getElementById('reg-profession').value.trim();
+            const formLabels = getFormLabels();
             const now = new Date();
             const dateStr = now.toLocaleDateString('ru-RU');
-            const number = 'FK-' + String(Math.floor(Math.random() * 900000 + 100000));
 
-            document.getElementById('preview-email').textContent = email;
             document.getElementById('preview-display').textContent = display;
             document.getElementById('preview-species').textContent = species;
-            document.getElementById('preview-furry-since').textContent = furrySince || '—';
+            document.getElementById('preview-birth-year').textContent = birthYear || '—';
+            document.getElementById('preview-birth-place').textContent = birthPlace || '—';
+            document.getElementById('preview-form').textContent = formLabels || '—';
             document.getElementById('preview-profession').textContent = profession || '—';
             document.getElementById('preview-date').textContent = dateStr;
-            document.getElementById('preview-number').textContent = number;
             document.getElementById('preview-species-badge').textContent = species;
 
             // Показываем аватар в паспорте, если загружен
@@ -432,18 +598,54 @@
             }
         }
 
+        const formMap = { anthro: 'Антропоморф', zoo: 'Зооморф', wave: 'Ампвейв', synt: 'Синт', proto: 'Протоген' };
+
+        function fillFinalPassport(user) {
+            document.getElementById('final-display').textContent = user.display_name || '—';
+            document.getElementById('final-species').textContent = user.species || '—';
+            document.getElementById('final-birth-year').textContent = user.birth_year || '—';
+            document.getElementById('final-birth-place').textContent = user.birth_place || '—';
+            document.getElementById('final-form').textContent = user.form ? user.form.split(',').map(v => formMap[v] || v).join(', ') : '—';
+            document.getElementById('final-profession').textContent = user.profession || '—';
+            document.getElementById('final-date').textContent = new Date(user.created_at).toLocaleDateString('ru-RU');
+            document.getElementById('final-number').textContent = user.passport_number || '—';
+            document.getElementById('final-species-badge').textContent = user.species || '';
+
+            if (user.avatar_url) {
+                document.getElementById('final-avatar-img').src = user.avatar_url;
+                document.getElementById('final-avatar-wrap').style.display = 'block';
+            }
+        }
+
+        async function downloadPassport() {
+            const el = document.getElementById('final-passport');
+            try {
+                const canvas = await html2canvas(el, { backgroundColor: '#1a0f2e', scale: 2 });
+                const link = document.createElement('a');
+                link.download = `passport-${document.getElementById('final-number').textContent}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            } catch (e) {
+                alert('Не удалось создать изображение паспорта');
+                console.error(e);
+            }
+        }
+
         async function submitRegistration() {
-            // Сначала загружаем аватар, если есть
             uploadedAvatarUrl = await uploadAvatar();
+
+            const formCheckboxes = document.querySelectorAll('input[name="reg-form"]:checked');
+            const formValues = Array.from(formCheckboxes).map(cb => cb.value);
 
             const data = {
                 email: document.getElementById('reg-email').value.trim(),
                 password: document.getElementById('reg-password').value,
                 display_name: document.getElementById('reg-display').value.trim() || null,
                 species: document.getElementById('reg-species').value.trim() || null,
-                furry_since: document.getElementById('reg-furry-since').value.trim() || null,
+                birth_year: document.getElementById('reg-birth-year').value.trim() || null,
+                birth_place: document.getElementById('reg-birth-place').value.trim() || null,
+                form: formValues.length ? formValues.join(',') : null,
                 profession: document.getElementById('reg-profession').value.trim() || null,
-                bio: document.getElementById('reg-bio').value.trim() || null,
                 avatar_url: uploadedAvatarUrl || null,
             };
 
@@ -456,7 +658,8 @@
                 if (res.ok) {
                     const user = await res.json();
                     localStorage.setItem('user_id', user.id);
-                    showStep(4);
+                    fillFinalPassport(user);
+                    showStep(5);
                 } else {
                     const err = await res.json();
                     alert(err.detail || 'Ошибка регистрации');

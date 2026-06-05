@@ -31,6 +31,10 @@
                     <input type="email" id="login-email" placeholder="your@email.com">
                 </div>
                 <div class="form-group">
+                    <label>Номер паспорта</label>
+                    <input type="text" id="login-passport" placeholder="FK-XXXXXX" style="text-transform:uppercase;">
+                </div>
+                <div class="form-group">
                     <label>Пароль</label>
                     <input type="password" id="login-password">
                 </div>
@@ -52,10 +56,11 @@
         async function login() {
             const data = {
                 email: document.getElementById("login-email").value.trim(),
+                passport_number: document.getElementById("login-passport").value.trim().toUpperCase(),
                 password: document.getElementById("login-password").value,
             };
-            if (!data.email || !data.password) {
-                alert("Заполни email и пароль!");
+            if (!data.email || !data.passport_number || !data.password) {
+                alert("Заполни email, номер паспорта и пароль!");
                 return;
             }
             try {
@@ -69,7 +74,8 @@
                     localStorage.setItem("user_id", result.user_id);
                     window.location.href = "profile.html";
                 } else {
-                    alert("Неверный email или пароль!");
+                    const err = await res.json();
+                    alert(err.detail || "Неверный email, номер паспорта или пароль!");
                 }
             } catch (e) {
                 alert("Ошибка связи с сервером");
