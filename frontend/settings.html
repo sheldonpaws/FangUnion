@@ -10,15 +10,11 @@
 <body>
     <header class="header">
         <div class="header-inner">
-            <div class="logo" onclick="location.href='index.html'">
+            <div class="logo" onclick="location.href='profile.html'">
                 <img src="img/logo.svg" alt="FangUnion" style="height:36px;">
             </div>
             <nav class="nav">
-                <a href="index.html" class="nav-link">Лента</a>
-                <a href="assets.html" class="nav-link">Галерея</a>
                 <a href="profile.html" class="nav-link">Профиль</a>
-                <a href="settings.html" class="nav-link active">Настройки</a>
-                <a href="#" class="nav-link" onclick="logout()">Выйти</a>
             </nav>
         </div>
     </header>
@@ -46,12 +42,12 @@
 
             <div class="form-group" style="position:relative;">
                 <label>Предыстория</label>
-                <textarea id="set-backstory" rows="4" placeholder="Предыстория твоей фурсоны..." style="width:100%; resize:vertical; min-height:80px;"></textarea>
+                <textarea id="set-backstory" rows="4" placeholder="История твоей фурсоны — откуда она, как пришла в этот мир..." style="width:100%; resize:vertical; min-height:80px;"></textarea>
             </div>
 
             <div class="form-group" style="position:relative;">
                 <label>Биография</label>
-                <textarea id="set-biography" rows="4" placeholder="Расскажи о своей фурсоне..." style="width:100%; resize:vertical; min-height:80px;"></textarea>
+                <textarea id="set-biography" rows="4" placeholder="Расскажи о своей фурсоне, её характере, интересах и мечтах..." style="width:100%; resize:vertical; min-height:80px;"></textarea>
                 <button class="btn btn-primary" onclick="saveSettings()" style="margin-top:8px;">Сохранить</button>
                 <p id="settings-msg" style="font-size:12px; margin-top:6px;"></p>
             </div>
@@ -71,18 +67,6 @@
             <p id="password-msg" style="font-size:12px; margin-top:8px; text-align:center;"></p>
         </div>
 
-        <div class="card">
-            <h3 class="card-title" style="margin-bottom:16px;">Данные аккаунта</h3>
-            <p style="font-size:13px; color:var(--text-muted); margin-bottom:8px;">
-                <span style="color:var(--silver);">Email:</span> <span id="set-email"></span>
-            </p>
-            <p style="font-size:13px; color:var(--text-muted); margin-bottom:8px;">
-                <span style="color:var(--silver);">Номер паспорта:</span> <span id="set-passport" style="color:var(--gold);"></span>
-            </p>
-            <p style="font-size:13px; color:var(--text-muted);">
-                <span style="color:var(--silver);">В стае с:</span> <span id="set-created"></span>
-            </p>
-        </div>
     </main>
 
     <footer class="footer">

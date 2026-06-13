@@ -10,13 +10,11 @@
 <body>
     <header class="header">
         <div class="header-inner">
-            <div class="logo" onclick="location.href='index.html'">
+            <div class="logo" onclick="location.href='profile.html'">
                 <img src="img/logo.svg" alt="FangUnion" style="height:36px;">
             </div>
             <nav class="nav">
-                <a href="index.html" class="nav-link">Лента</a>
-                <a href="arrival.html" class="nav-link">Въезд</a>
-                <a href="login.html" class="nav-link active">Войти</a>
+                <a href="profile.html" class="nav-link">Профиль</a>
             </nav>
         </div>
     </header>
@@ -39,12 +37,42 @@
                     <input type="password" id="login-password">
                 </div>
                 <button class="btn btn-gold" style="width:100%" onclick="login()">Войти</button>
-                <p style="text-align:center; margin-top:14px; font-size:13px; color:var(--text-muted);">
+                <p style="text-align:center; margin-top:10px;">
+                    <a href="#" onclick="showRecovery(); return false;" style="font-size:13px; color:var(--violet-light);">Забыли пароль?</a>
+                </p>
+                <p style="text-align:center; margin-top:8px; font-size:13px; color:var(--text-muted);">
                     Ещё не в стае? <a href="arrival.html">Вступить</a>
                 </p>
             </div>
         </div>
     </main>
+
+    <!-- Модальное окно восстановления пароля -->
+    <div id="recovery-modal" style="
+        display:none; position:fixed; top:0; left:0; right:0; bottom:0;
+        background:rgba(0,0,0,0.7); z-index:1000;
+        justify-content:center; align-items:center;
+    ">
+        <div class="card" style="width:400px; padding:24px;">
+            <h3 class="card-title" style="text-align:center; margin-bottom:16px;">🔑 Восстановление пароля</h3>
+            <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px; text-align:center;">
+                Введите номер паспорта, указанный при регистрации. Мы найдём ваш аккаунт и покажем привязанный пароль.
+            </p>
+            <div class="form-group">
+                <label>Номер паспорта</label>
+                <input type="text" id="recovery-passport-input" placeholder="FK-XXXXXX" style="text-transform:uppercase;">
+            </div>
+            <div id="recovery-result" style="display:none; margin-bottom:12px; padding:14px; background:rgba(148,120,182,0.08); border:1px solid var(--border-color); border-radius:8px;">
+                <p style="font-size:13px; color:var(--text); margin-bottom:6px;">✅ Аккаунт найден!</p>
+                <p style="font-size:13px; color:var(--text);"><span style="color:var(--silver);">Пароль:</span> <strong id="recovery-password" style="color:var(--violet-light);"></strong></p>
+            </div>
+            <div style="display:flex; gap:10px;">
+                <button class="btn" style="background:var(--black-mid); color:var(--text-muted); border:1px solid var(--border-color); flex:1;" onclick="hideRecovery()">Закрыть</button>
+                <button class="btn btn-primary" style="flex:1;" onclick="recoverPassword()">Найти</button>
+            </div>
+            <p id="recovery-error" style="display:none; font-size:13px; color:var(--error); margin-top:10px; text-align:center;"></p>
+        </div>
+    </div>
 
     <footer class="footer">
         <p>FangUnion © 2026 | Союз Клыков — пространство для фурри</p>
@@ -79,6 +107,42 @@
                 }
             } catch (e) {
                 alert("Ошибка связи с сервером");
+            }
+        }
+
+        function showRecovery() {
+            document.getElementById("recovery-modal").style.display = "flex";
+            document.getElementById("recovery-email").value = "";
+            document.getElementById("recovery-result").style.display = "none";
+            document.getElementById("recovery-error").style.display = "none";
+        }
+
+        function hideRecovery() {
+            document.getElementById("recovery-modal").style.display = "none";
+        }
+
+        async function recoverPassword() {
+            const passportNumber = document.getElementById("recovery-passport-input").value.trim().toUpperCase();
+            if (!passportNumber) {
+                document.getElementById("recovery-error").textContent = "Введите номер паспорта";
+                document.getElementById("recovery-error").style.display = "block";
+                return;
+            }
+            try {
+                const res = await fetch(`${API}/users/recover?passport_number=${encodeURIComponent(passportNumber)}`);
+                if (res.ok) {
+                    const user = await res.json();
+                    document.getElementById("recovery-password").textContent = user.plain_password || "—";
+                    document.getElementById("recovery-result").style.display = "block";
+                    document.getElementById("recovery-error").style.display = "none";
+                } else {
+                    document.getElementById("recovery-error").textContent = "Аккаунт с таким номером паспорта не найден";
+                    document.getElementById("recovery-error").style.display = "block";
+                    document.getElementById("recovery-result").style.display = "none";
+                }
+            } catch (e) {
+                document.getElementById("recovery-error").textContent = "Ошибка связи с сервером";
+                document.getElementById("recovery-error").style.display = "block";
             }
         }
     </script>

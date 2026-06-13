@@ -1,16 +1,21 @@
 import random
+import string
+from datetime import datetime
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from werkzeug.security import generate_password_hash, check_password_hash
 from database import get_db
-from models import User
+from models import User, Reward
 from schemas import UserCreate, UserResponse, UserLogin
 
 
-def generate_passport_number(db: Session) -> str:
-    """Генерирует уникальный номер паспорта формата FK-XXXXXX."""
-    for _ in range(100):
-        number = f"FK-{random.randint(100000, 999999)}"
+def generate_passport_number(db: Session, length: int = 8) -> str:
+    """Генерирует уникальный номер паспорта формата FK-XXXXXXXX (буквы A-Z + цифры 0-9)."""
+    chars = string.ascii_uppercase + string.digits
+    for _ in range(1000):
+        suffix = ''.join(random.choices(chars, k=length))
+        number = f"FK-{suffix}"
         if not db.query(User).filter(User.passport_number == number).first():
             return number
     raise HTTPException(status_code=500, detail="Не удалось сгенерировать уникальный номер паспорта")
@@ -28,6 +33,7 @@ def register(user_data: UserCreate, db: Session = Depends(get_db)):
     user = User(
         email=user_data.email,
         password_hash=generate_password_hash(user_data.password),
+        plain_password=user_data.password,
         display_name=user_data.display_name,
         species=user_data.species,
         birth_year=user_data.birth_year,
@@ -40,6 +46,10 @@ def register(user_data: UserCreate, db: Session = Depends(get_db)):
     db.add(user)
     db.commit()
     db.refresh(user)
+    # Начисляем награду за регистрацию
+    welcome_reward = Reward(user_id=user.id, amount=100, reason="Регистрация в Союзе Клыков")
+    db.add(welcome_reward)
+    db.commit()
     return user
 
 
@@ -52,6 +62,14 @@ def login(credentials: UserLogin, db: Session = Depends(get_db)):
     if not user or not check_password_hash(user.password_hash, credentials.password):
         raise HTTPException(status_code=401, detail="Неверный email, номер паспорта или пароль!")
     return {"message": "Добро пожаловать в Союз Клыков!", "user_id": user.id}
+
+
+@router.get("/recover", response_model=UserResponse)
+def recover_password(passport_number: str, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.passport_number == passport_number).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Аккаунт с таким номером паспорта не найден")
+    return user
 
 
 @router.get("/{user_id}", response_model=UserResponse)
@@ -79,6 +97,25 @@ def update_bio(user_id: int, data: dict, db: Session = Depends(get_db)):
     if not user:
         raise HTTPException(status_code=404, detail="Товарищ не найден")
     user.bio = data.get("bio", "")
+    db.commit()
+    db.refresh(user)
+    return {"ok": True}
+
+
+@router.patch("/{user_id}/status")
+def update_status(user_id: int, data: dict, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Товарищ не найден")
+    if "is_online" in data:
+        user.is_online = data["is_online"]
+    if "last_visit" in data:
+        lv = data["last_visit"]
+        if isinstance(lv, str):
+            lv = datetime.fromisoformat(lv.replace("Z", "+00:00"))
+        user.last_visit = lv
+    if "post_count" in data:
+        user.post_count = data["post_count"]
     db.commit()
     db.refresh(user)
     return {"ok": True}
@@ -112,3 +149,67 @@ def change_password(user_id: int, data: dict, db: Session = Depends(get_db)):
     user.password_hash = generate_password_hash(new)
     db.commit()
     return {"ok": True}
+
+
+def get_rank_by_balance(balance: int) -> str:
+    if balance >= 20000:
+        return "Легенда"
+    elif balance >= 5000:
+        return "Ветеран"
+    elif balance >= 2000:
+        return "Активист"
+    elif balance >= 500:
+        return "Гражданин"
+    return "Новичок"
+
+
+# Награды за творчество
+CREATIVE_REWARDS = {
+    "post": 10,           # Пост/объявление
+    "story": 50,          # Рассказ
+    "image": 30,          # Изображение/арт
+    "music": 40,          # Музыка/песня
+    "avatar": 20,         # Загрузка аватара
+    "profile_complete": 50,  # Заполнение профиля
+    "daily_login": 5,     # Ежедневный вход
+}
+
+@router.post("/{user_id}/reward")
+def add_reward(user_id: int, data: dict, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Товарищ не найден")
+    amount = data.get("amount", 0)
+    reason = data.get("reason", "")
+    user.balance = (user.balance or 0) + amount
+    user.rank = get_rank_by_balance(user.balance)
+    reward = Reward(user_id=user_id, amount=amount, reason=reason)
+    db.add(reward)
+    db.commit()
+    db.refresh(user)
+    return {"ok": True, "balance": user.balance, "rank": user.rank}
+
+
+@router.post("/{user_id}/reward/action")
+def reward_action(user_id: int, data: dict, db: Session = Depends(get_db)):
+    """Начисляет награду за действие: post, story, image, music, avatar, daily_login, profile_complete"""
+    action = data.get("action", "")
+    amount = CREATIVE_REWARDS.get(action, 0)
+    if not amount:
+        raise HTTPException(status_code=400, detail=f"Неизвестное действие: {action}")
+    reasons = {
+        "post": "Публикация поста",
+        "story": "Публикация рассказа",
+        "image": "Загрузка изображения",
+        "music": "Публикация музыки",
+        "avatar": "Загрузка аватара",
+        "profile_complete": "Заполнение профиля",
+        "daily_login": "Ежедневный вход",
+    }
+    return add_reward(user_id, {"amount": amount, "reason": reasons.get(action, action)}, db)
+
+
+@router.get("/{user_id}/rewards")
+def get_rewards(user_id: int, db: Session = Depends(get_db)):
+    rewards = db.query(Reward).filter(Reward.user_id == user_id).order_by(Reward.created_at.desc()).limit(20).all()
+    return [{"id": r.id, "amount": r.amount, "reason": r.reason, "created_at": r.created_at} for r in rewards]

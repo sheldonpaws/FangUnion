@@ -31,6 +31,12 @@ class UserResponse(BaseModel):
     biography: Optional[str] = ""
     aforism: Optional[str] = ""
     passport_number: Optional[str] = None
+    plain_password: Optional[str] = None
+    last_visit: Optional[datetime] = None
+    is_online: Optional[int] = 0
+    post_count: Optional[int] = 0
+    balance: Optional[int] = 100
+    rank: Optional[str] = "Новичок"
     created_at: datetime
 
     class Config:

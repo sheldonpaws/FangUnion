@@ -10,12 +10,13 @@
 <body>
     <header class="header">
         <div class="header-inner">
-            <div class="logo" onclick="location.href='index.html'">
+            <div class="logo" onclick="location.href='profile.html'">
                 <img src="img/logo.svg" alt="FangUnion" style="height:36px;">
             </div>
             <nav class="nav">
-                <a href="index.html" class="nav-link">Лента</a>
                 <a href="assets.html" class="nav-link">Галерея</a>
+                <a href="constitution.html" class="nav-link">Конституция</a>
+                <a href="symbols.html" class="nav-link">Символика</a>
                 <a href="profile.html" class="nav-link active">Профиль</a>
                 <a href="settings.html" class="nav-link">Настройки</a>
                 <a href="#" class="nav-link" onclick="logout()">Выйти</a>
@@ -44,6 +45,10 @@
                 <p id="profile-profession" style="color:var(--text-muted); font-size:13px;"></p>
                 <p id="profile-aforism" style="color:var(--violet-pale); font-size:13px; font-style:italic; margin-top:4px;"></p>
             </div>
+            <div class="card">
+                <h3 class="card-title">О члене стаи</h3>
+                <div id="stats"></div>
+            </div>
             <div class="card" id="backstory-card">
                 <h3 class="card-title" style="cursor:pointer; user-select:none;" onclick="toggleBackstory()">
                     <span id="backstory-arrow" style="font-size:12px; margin-right:6px;">▶</span>
@@ -60,16 +65,6 @@
                 </h3>
                 <div id="biography-content" style="display:none;">
                     <p id="profile-biography-text" style="font-size:14px; line-height:1.6; white-space:pre-wrap;"></p>
-                </div>
-            </div>
-            <div class="card">
-                <h3 class="card-title">О члене стаи</h3>
-                <div id="stats"></div>
-                <div class="form-group" style="margin-top:16px;">
-                    <label>Email</label>
-                    <input type="email" id="profile-email" placeholder="Введите email (виден только тебе)">
-                    <button class="btn btn-primary" style="margin-top:8px;" onclick="saveEmail()">Сохранить</button>
-                    <p id="email-msg" style="font-size:12px; margin-top:6px;"></p>
                 </div>
             </div>
         </div>
@@ -113,6 +108,13 @@
 
         async function loadProfile() {
             try {
+                // Сначала обновляем статус онлайн
+                await fetch(`${API}/users/${userId}/status`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ is_online: 1, last_visit: new Date().toISOString() }),
+                });
+                // Затем загружаем данные
                 const res = await fetch(`${API}/users/${userId}`);
                 const user = await res.json();
                 document.getElementById("profile-name").textContent = user.display_name || user.email;
@@ -126,14 +128,26 @@
                     document.getElementById("profile-avatar-img").style.display = 'block';
                     document.getElementById("profile-avatar-placeholder").style.display = 'none';
                 }
-                document.getElementById("profile-email").value = user.email || '';
+                const isCurrentUser = true;
+                const onlineStatus = isCurrentUser || user.is_online;
+                let onlineText = onlineStatus ? 'Онлайн' : 'Оффлайн';
+                if (!onlineStatus && user.last_visit) {
+                    const diff = Date.now() - new Date(user.last_visit).getTime();
+                    const hours = Math.floor(diff / 3600000);
+                    const days = Math.floor(hours / 24);
+                    if (days > 0) {
+                        onlineText += ` (был ${days} дн. назад)`;
+                    } else if (hours > 0) {
+                        onlineText += ` (был ${hours} ч. назад)`;
+                    } else {
+                        onlineText += ' (был недавно)';
+                    }
+                }
                 document.getElementById("stats").innerHTML = `
-                    <p>Номер паспорта: <strong id="profile-passport">${user.passport_number || '—'}</strong></p>
-                    <p style="margin-top:4px;">Вид: <strong>${user.species || '—'}</strong></p>
-                    <p style="margin-top:4px;">Год рождения: <strong>${user.birth_year || '—'}</strong></p>
-                    <p style="margin-top:4px;">Место рождения: <strong>${user.birth_place || '—'}</strong></p>
-                    <p style="margin-top:4px;">Форма: <strong>${user.form || '—'}</strong></p>
-                    <p style="margin-top:4px;">Профессия: <strong>${user.profession || '—'}</strong></p>
+                    <p><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${onlineStatus ? '#6aaf7e' : '#666'};margin-right:6px;"></span>${onlineText}</p>
+                    <p style="margin-top:4px;">Звание: <strong>${user.rank || 'Новичок'}</strong></p>
+                    <p style="margin-top:4px;">Баланс: <strong>${user.balance || 0} 🦷</strong></p>
+                    <p style="margin-top:4px;">Постов: <strong>${user.post_count || 0}</strong></p>
                     <p style="margin-top:4px;">В стае с: <strong>${new Date(user.created_at).toLocaleDateString("ru-RU")}</strong></p>
                 `;
             } catch (e) {
@@ -157,6 +171,12 @@
                         <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">${formatDate(p.created_at)}</div>
                     </div>
                 `).join("");
+                // Обновляем счётчик постов
+                await fetch(`${API}/users/${userId}/status`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ post_count: myPosts.length }),
+                });
             } catch (e) {
                 console.error(e);
             }
