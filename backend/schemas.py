@@ -35,6 +35,11 @@ class UserResponse(BaseModel):
     last_visit: Optional[datetime] = None
     is_online: Optional[int] = 0
     post_count: Optional[int] = 0
+    story_count: Optional[int] = 0
+    image_count: Optional[int] = 0
+    music_count: Optional[int] = 0
+    daily_login_streak: Optional[int] = 0
+    help_count: Optional[int] = 0
     balance: Optional[int] = 100
     rank: Optional[str] = "Новичок"
     created_at: datetime

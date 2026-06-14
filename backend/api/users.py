@@ -116,6 +116,18 @@ def update_status(user_id: int, data: dict, db: Session = Depends(get_db)):
         user.last_visit = lv
     if "post_count" in data:
         user.post_count = data["post_count"]
+    if "story_count" in data:
+        user.story_count = data["story_count"]
+    if "image_count" in data:
+        user.image_count = data["image_count"]
+    if "music_count" in data:
+        user.music_count = data["music_count"]
+    if "daily_login_streak" in data:
+        user.daily_login_streak = data["daily_login_streak"]
+    if "daily_login_last" in data:
+        user.daily_login_last = data["daily_login_last"]
+    if "help_count" in data:
+        user.help_count = data["help_count"]
     db.commit()
     db.refresh(user)
     return {"ok": True}
@@ -152,18 +164,24 @@ def change_password(user_id: int, data: dict, db: Session = Depends(get_db)):
 
 
 def get_rank_by_balance(balance: int) -> str:
-    if balance >= 20000:
+    if balance >= 100000:
         return "Легенда"
-    elif balance >= 5000:
+    elif balance >= 50000:
+        return "Мастер"
+    elif balance >= 20000:
+        return "Герой"
+    elif balance >= 10000:
         return "Ветеран"
-    elif balance >= 2000:
+    elif balance >= 5000:
         return "Активист"
-    elif balance >= 500:
+    elif balance >= 2000:
         return "Гражданин"
+    elif balance >= 500:
+        return "Участник"
     return "Новичок"
 
 
-# Награды за творчество
+# Награды за действия
 CREATIVE_REWARDS = {
     "post": 10,           # Пост/объявление
     "story": 50,          # Рассказ
@@ -172,6 +190,7 @@ CREATIVE_REWARDS = {
     "avatar": 20,         # Загрузка аватара
     "profile_complete": 50,  # Заполнение профиля
     "daily_login": 5,     # Ежедневный вход
+    "help_others": 15,    # Помощь другим
 }
 
 @router.post("/{user_id}/reward")
@@ -205,8 +224,40 @@ def reward_action(user_id: int, data: dict, db: Session = Depends(get_db)):
         "avatar": "Загрузка аватара",
         "profile_complete": "Заполнение профиля",
         "daily_login": "Ежедневный вход",
+        "help_others": "Помощь другим",
     }
     return add_reward(user_id, {"amount": amount, "reason": reasons.get(action, action)}, db)
+
+
+@router.post("/{user_id}/daily-login")
+def daily_login(user_id: int, db: Session = Depends(get_db)):
+    """Ежедневный вход с прогрессивной наградой: 5, 15, 25, 35... за каждый день подряд. Сброс при пропуске."""
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Товарищ не найден")
+    now = datetime.utcnow()
+    last = user.daily_login_last
+    streak = user.daily_login_streak or 0
+    if last:
+        diff_days = (now - last).days
+        if diff_days == 0:
+            return {"ok": True, "message": "Сегодня уже получено", "streak": streak, "balance": user.balance}
+        elif diff_days == 1:
+            streak += 1
+        else:
+            streak = 1
+    else:
+        streak = 1
+    amount = 5 + (streak - 1) * 10
+    user.daily_login_streak = streak
+    user.daily_login_last = now
+    user.balance = (user.balance or 0) + amount
+    user.rank = get_rank_by_balance(user.balance)
+    reward = Reward(user_id=user_id, amount=amount, reason=f"Ежедневный вход (день {streak})")
+    db.add(reward)
+    db.commit()
+    db.refresh(user)
+    return {"ok": True, "amount": amount, "streak": streak, "balance": user.balance, "rank": user.rank}
 
 
 @router.get("/{user_id}/rewards")

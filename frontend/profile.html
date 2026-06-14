@@ -14,9 +14,7 @@
                 <img src="img/logo.svg" alt="FangUnion" style="height:36px;">
             </div>
             <nav class="nav">
-                <a href="assets.html" class="nav-link">Галерея</a>
-                <a href="constitution.html" class="nav-link">Конституция</a>
-                <a href="symbols.html" class="nav-link">Символика</a>
+                <a href="forum.html" class="nav-link">Форум</a>
                 <a href="profile.html" class="nav-link active">Профиль</a>
                 <a href="settings.html" class="nav-link">Настройки</a>
                 <a href="#" class="nav-link" onclick="logout()">Выйти</a>
@@ -146,8 +144,10 @@
                 document.getElementById("stats").innerHTML = `
                     <p><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${onlineStatus ? '#6aaf7e' : '#666'};margin-right:6px;"></span>${onlineText}</p>
                     <p style="margin-top:4px;">Звание: <strong>${user.rank || 'Новичок'}</strong></p>
-                    <p style="margin-top:4px;">Баланс: <strong>${user.balance || 0} 🦷</strong></p>
-                    <p style="margin-top:4px;">Постов: <strong>${user.post_count || 0}</strong></p>
+                    <p style="margin-top:4px;">Баланс: <strong>${user.balance || 0} фангов</strong> <span onclick="showRewardsInfo()" style="cursor:pointer; font-size:14px; margin-left:4px;" title="Информация о наградах">ℹ️</span></p>
+                    <p style="margin-top:4px;">Постов: <strong>${user.post_count || 0}</strong> | Рассказов: <strong>${user.story_count || 0}</strong></p>
+                    <p style="margin-top:4px;">Изображений: <strong>${user.image_count || 0}</strong> | Музыки: <strong>${user.music_count || 0}</strong></p>
+                    <p style="margin-top:4px;">Серия входов: <strong>${user.daily_login_streak || 0} дн.</strong> | Помог другим: <strong>${user.help_count || 0} раз</strong></p>
                     <p style="margin-top:4px;">В стае с: <strong>${new Date(user.created_at).toLocaleDateString("ru-RU")}</strong></p>
                 `;
             } catch (e) {
@@ -208,6 +208,10 @@
             window.location.href = "login.html";
         }
 
+        function showRewardsInfo() {
+            document.getElementById("rewards-modal").style.display = "flex";
+        }
+
         function toggleBackstory() {
             const content = document.getElementById("backstory-content");
             const arrow = document.getElementById("backstory-arrow");
@@ -240,3 +244,27 @@
     </script>
 </body>
 </html>
+
+<!-- Модальное окно — таблица наград -->
+<div id="rewards-modal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; justify-content:center; align-items:center;">
+    <div class="card" style="width:420px; padding:24px; max-height:80vh; overflow-y:auto;">
+        <h3 class="card-title" style="text-align:center; margin-bottom:16px;">💰 Награды за действия</h3>
+        <table style="width:100%; font-size:13px; border-collapse:collapse;">
+            <tr style="border-bottom:1px solid var(--border-color);"><th style="text-align:left; padding:6px 0;">Действие</th><th style="text-align:right; padding:6px 0;">Награда</th></tr>
+            <tr><td style="padding:5px 0;">Пост</td><td style="text-align:right;">10 фангов</td></tr>
+            <tr><td style="padding:5px 0;">Рассказ</td><td style="text-align:right;">50 фангов</td></tr>
+            <tr><td style="padding:5px 0;">Изображение/арт</td><td style="text-align:right;">30 фангов</td></tr>
+            <tr><td style="padding:5px 0;">Музыка/песня</td><td style="text-align:right;">40 фангов</td></tr>
+            <tr><td style="padding:5px 0;">Помощь другим</td><td style="text-align:right;">15 фангов</td></tr>
+            <tr style="border-top:1px solid var(--border-color);"><td style="padding:8px 0; font-weight:bold;">Ежедневный вход</td><td style="text-align:right; padding:8px 0;"></td></tr>
+            <tr><td style="padding:3px 0; color:var(--text-muted);">День 1</td><td style="text-align:right;">5 фангов</td></tr>
+            <tr><td style="padding:3px 0; color:var(--text-muted);">День 2</td><td style="text-align:right;">15 фангов</td></tr>
+            <tr><td style="padding:3px 0; color:var(--text-muted);">День 3</td><td style="text-align:right;">25 фангов</td></tr>
+            <tr><td style="padding:3px 0; color:var(--text-muted);">День 4+</td><td style="text-align:right;">+10 фангов за каждый день</td></tr>
+            <tr><td style="padding:3px 0; color:var(--text-muted);">Пропуск</td><td style="text-align:right;">Сброс на 5 фангов</td></tr>
+        </table>
+        <p style="font-size:12px; color:var(--text-muted); margin-top:12px;">Звания: Новичок (0) → Участник (500) → Гражданин (2000) → Активист (5000) → Ветеран (10000) → Герой (20000) → Мастер (50000) → Легенда (100000)</p>
+        <p style="font-size:12px; color:var(--text-muted); margin-top:12px;">Загрузка аватара и заполнение профиля — одноразовые награды.</p>
+        <button class="btn btn-primary" style="width:100%; margin-top:16px;" onclick="document.getElementById('rewards-modal').style.display='none'">Закрыть</button>
+    </div>
+</div>
